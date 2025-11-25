@@ -28,7 +28,7 @@ const doctors = [
         "Dyslipidemia"
     ],
     availability: "Mon-Sat: 9AM-8PM",
-    image: "/public/Sujith.png"
+    image: "/Sujith.png"
   },
 
   {
@@ -49,7 +49,7 @@ const doctors = [
         "Preventive Medicine"
     ],
     availability: "Mon-Sat: 9AM-6PM",
-    image: "/public/Dr. Karthik S M.png"
+    image: "/Dr. Karthik S M.png"
   },
 
   {
@@ -69,7 +69,7 @@ const doctors = [
         "Tuberculosis and Lung Cancer"
     ],
     availability: "Mon-Fri: 10AM-6PM",
-    image: "/public/Sagar.png"
+    image: "/Sagar.png"
   },
 
   {
@@ -87,7 +87,7 @@ const doctors = [
         "General Medicine"
     ],
     availability: "Tue- Sat: 10AM-5PM",
-    image: "/public/Dr. Babu Reddy.png"
+    image: "/Dr. Babu Reddy.png"
   },
 
   {
@@ -107,7 +107,7 @@ const doctors = [
         "Complex Trauma and Limb Lengthening"
     ],
     availability: "Mon-Thu: 9AM-4PM",
-    image: "/public/Dr. Rajendra Reddy.png"
+    image: "/Dr. Rajendra Reddy.png"
   },
 
   {
@@ -127,7 +127,7 @@ const doctors = [
         "Non-interventional Cardiology"
     ],
     availability: "Mon-Fri: 9AM-5PM",
-    image: "/public/Dr.Gundurao Harsh Joshi.png",
+    image: "/Dr.Gundurao Harsh Joshi.png",
   },
 
   {
@@ -147,7 +147,7 @@ const doctors = [
         "Infections, Allergy and Asthma"
     ],
     availability: "Mon-Sat: 9AM-1PM",
-    image: "/public/Ashwini.png",
+    image: "/Ashwini.png",
   },
 
   {
@@ -166,7 +166,7 @@ const doctors = [
         "Peripheral Doppler Scans"
     ],
     availability: "Tue-Sat: 10AM-4PM",
-    image: "/public/Dr. Sujith J.png",
+    image: "/Dr. Sujith J.png",
   },
 
   {
@@ -186,7 +186,7 @@ const doctors = [
         "Liver Cancer and Alcohol-Related Liver Disease"
     ],
     availability: "By appointment",
-    image: "/public/Dr. pramod.png",
+    image: "/Dr. pramod.png",
   },
 ];
 

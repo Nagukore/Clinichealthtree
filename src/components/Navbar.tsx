@@ -56,7 +56,7 @@ function Navbar() {
             <div className="flex items-center gap-2 cursor-pointer">
 
               <img
-                src="/public/logo.png"
+                src="/logo.png"
                 alt="Clinique HealthTree Logo"
                 className="h-10 w-auto md:h-14 object-contain"
               />
