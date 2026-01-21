@@ -10,7 +10,7 @@ function Navbar() {
     { name: "About", href: "#about" },
     { name: "Services", href: "#services" },
     { name: "Doctors", href: "#doctors" },
-    { name: "Contact", href: "#contact" },
+    { name: "Contact", href: "#contact" }
   ];
 
   useEffect(() => {
@@ -21,6 +21,15 @@ function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const scrollToSection = (href) => {
+    const id = href.replace('#', '');
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setIsOpen(false);
+    }
+  };
+
   return (
     <>
       {/* Top Bar */}
@@ -29,7 +38,9 @@ function Navbar() {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <Phone size={16} />
-              <span>+91 8041663537</span>
+              <a href="tel:+918041663537" className="hover:text-teal-200 transition">
+                +91 8041663537
+              </a>
             </div>
             <div className="hidden md:flex items-center gap-2">
               <Clock size={16} />
@@ -37,7 +48,10 @@ function Navbar() {
             </div>
           </div>
 
-          <button className="hidden md:block bg-white text-teal-700 px-4 py-1 rounded-full text-sm font-semibold hover:bg-teal-50 transition">
+          <button 
+            onClick={() => scrollToSection('#contact')}
+            className="hidden md:block bg-white text-teal-700 px-4 py-1 rounded-full text-sm font-semibold hover:bg-teal-50 transition"
+          >
             Book Appointment
           </button>
         </div>
@@ -53,14 +67,12 @@ function Navbar() {
           <div className="flex justify-between items-center h-20">
 
             {/* LOGO + TEXT */}
-            <div className="flex items-center gap-2 cursor-pointer">
-
+            <a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection('#home'); }} className="flex items-center gap-2 cursor-pointer">
               <img
                 src="/logo.png"
                 alt="Clinique HealthTree Logo"
                 className="h-10 w-auto md:h-14 object-contain"
               />
-
               <div className="flex flex-col leading-tight">
                 <h1 className="text-lg md:text-xl font-bold text-teal-700 whitespace-nowrap">
                   Clinique HealthTree
@@ -69,8 +81,7 @@ function Navbar() {
                   Multispeciality Clinic & Diagnostics
                 </p>
               </div>
-
-            </div>
+            </a>
 
             {/* Desktop Links */}
             <div className="hidden md:flex space-x-8">
@@ -78,6 +89,10 @@ function Navbar() {
                 <a
                   key={link.name}
                   href={link.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection(link.href);
+                  }}
                   className="relative text-gray-700 hover:text-teal-600 font-medium group transition"
                 >
                   {link.name}
@@ -107,14 +122,20 @@ function Navbar() {
               <a
                 key={link.name}
                 href={link.href}
-                onClick={() => setIsOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(link.href);
+                }}
                 className="block px-3 py-2 text-gray-700 hover:text-teal-600 hover:bg-teal-50 rounded-md font-medium transition"
               >
                 {link.name}
               </a>
             ))}
 
-            <button className="w-full bg-teal-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-teal-700 transition transform hover:scale-[1.02]">
+            <button 
+              onClick={() => scrollToSection('#contact')}
+              className="w-full bg-teal-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-teal-700 transition transform hover:scale-[1.02]"
+            >
               Book Appointment
             </button>
           </div>
