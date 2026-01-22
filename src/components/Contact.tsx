@@ -24,8 +24,8 @@ function Contact() {
               </div>
               <h3 className="font-bold text-xl text-gray-900 mb-2">Phone</h3>
               <p className="text-gray-600 mb-2">Call us for appointments and inquiries</p>
-              <a href="tel:+918041663537" className="text-teal-600 font-semibold text-lg hover:text-teal-700">
-                +91 8041663537
+              <a href="tel:+918073718255" className="text-teal-600 font-semibold text-lg hover:text-teal-700">
+                +91 8073718255
               </a>
             </div>
 
@@ -35,8 +35,8 @@ function Contact() {
               </div>
               <h3 className="font-bold text-xl text-gray-900 mb-2">Email</h3>
               <p className="text-gray-600 mb-2">Send us your queries anytime</p>
-              <a href="mailto:info@healthcare.com" className="text-teal-600 font-semibold hover:text-teal-700">
-                info@healthcare.com
+              <a href="mailto:healthtreeclinic@gmail.com" className="text-teal-600 font-semibold hover:text-teal-700">
+                healthtreeclinic@gmail.com
               </a>
             </div>
 
@@ -56,9 +56,9 @@ function Contact() {
               </div>
               <h3 className="font-bold text-xl text-gray-900 mb-2">Working Hours</h3>
               <div className="text-gray-600 space-y-1">
-                <p>Monday - Saturday: 9:00 AM - 8:00 PM</p>
-                <p>Sunday: 10:00 AM - 4:00 PM</p>
-                <p className="text-teal-600 font-semibold mt-2">Emergency: 24/7</p>
+                <p>Monday - Saturday: 7:00 AM - 10:00 PM</p>
+                <p>Sunday: 7:00 AM - 1:00 PM</p>
+                {/* <p className="text-teal-600 font-semibold mt-2">Emergency: 24/7</p> */}
               </div>
             </div>
           </div>

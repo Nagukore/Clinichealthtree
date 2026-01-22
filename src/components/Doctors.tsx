@@ -15,7 +15,7 @@ const doctors = [
     full: `Dr. Sujith M. S completed MBBS from Shimoga Institute of Medical Science and Research Centre and DNB in Internal Medicine from Narayana Hrudayalaya, Bengaluru. He is known for his patience and diagnostic skills. Special interests include Respiratory Diseases, Infectious diseases including COVID-19, Hypertension, Diabetes Mellitus, Thyroid disorders, Dyslipidemia and many other medical conditions. Member of the American College of Physicians.`,
     expertise: ["Respiratory Diseases & Allergies", "Infectious diseases", "Hypertension & Cardiovascular Health", "Diabetes & Thyroid disorders", "Dyslipidemia"],
     availability: "Mon-Sat: 9AM-8PM",
-    image: "/Sujith.png"
+    image: "/Sujith.jpg"
   },
   {
     id: "dr-karthik-sm",
@@ -87,7 +87,7 @@ const doctors = [
     full: `Dr. Ashwini B S has presented research at national and international conferences, and has strong expertise in neonatal care, growth & development, nutrition, immunisation, infections, allergy and asthma.`,
     expertise: ["Neonatal Care", "Growth & Development Monitoring", "Childhood Nutrition", "Infections, Allergy and Asthma"],
     availability: "Mon-Sat: 9AM-1PM",
-    image: "/Ashwini.png"
+    image: "/Ashwini.jpg"
   },
   {
     id: "dr-sujit-j",
