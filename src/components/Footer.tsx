@@ -1,12 +1,10 @@
 import {
-  Heart,
   Mail,
   MapPin,
   Phone,
   Facebook,
-  // Twitter,
   Instagram,
-  // Linkedin,
+  ArrowRight,
 } from "lucide-react";
 
 function Footer() {
@@ -15,146 +13,131 @@ function Footer() {
   };
 
   return (
-    <footer className="bg-gray-900 text-gray-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+    <footer className="bg-slate-950 text-slate-400 border-t border-slate-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+          
           {/* ---------------------------------------------------------------- */}
-          {/* Brand */}
+          {/* Brand & Identity */}
           {/* ---------------------------------------------------------------- */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="bg-teal-600 p-2 rounded-lg">
-                <Heart className="text-white" size={22} />
-              </div>
+          <div className="space-y-6">
+            <div className="flex items-center gap-4">
+              {/* LOGO REPLACEMENT */}
+              <img 
+                src="/logo.png" 
+                alt="Clinique HealthTree Logo" 
+                className="h-12 w-auto object-contain"
+                onError={(e) => (e.currentTarget.style.display = 'none')} // Hides if image is missing
+              />
               <div>
-                <h3 className="text-white text-xl font-bold">
+                <h3 className="text-white text-xl font-black tracking-tight leading-none">
                   Clinique HealthTree
                 </h3>
-                <p className="text-sm text-gray-400">
-                  Multispeciality Clinic & Diagnostics
+                <p className="text-[10px] text-teal-500 font-bold uppercase tracking-widest mt-1">
+                  Multispeciality Clinic
                 </p>
               </div>
             </div>
 
-            <p className="text-gray-400 leading-relaxed text-sm">
-              Delivering comprehensive healthcare services with compassion,
-              advanced diagnostics, and expert specialists.
+            <p className="text-sm leading-relaxed text-slate-500">
+              Singasandra's premier multispeciality clinical board providing 
+              precision diagnostics and compassionate senior specialist care.
             </p>
 
-            {/* Social */}
+            {/* Social Channels */}
             <div className="flex gap-3 pt-2">
               <a
                 href="https://www.facebook.com/share/17wtmYgner/"
-                className="bg-gray-800 p-2 rounded-lg hover:bg-teal-600 transition"
+                target="_blank"
+                className="w-10 h-10 flex items-center justify-center bg-slate-900 border border-slate-800 rounded-xl hover:border-teal-500 hover:text-white transition-all group"
                 aria-label="Facebook"
               >
-                <Facebook size={18} />
+                <Facebook size={18} className="group-hover:scale-110 transition-transform" />
               </a>
-              {/* <a
-                href="#"
-                className="bg-gray-800 p-2 rounded-lg hover:bg-teal-600 transition"
-                aria-label="Twitter"
-              >
-                <Twitter size={18} />
-              </a> */}
               <a
                 href="https://www.instagram.com/healthtreeclinique?igsh=ODE0Nnk5MXd4Y3p3"
-                className="bg-gray-800 p-2 rounded-lg hover:bg-teal-600 transition"
+                target="_blank"
+                className="w-10 h-10 flex items-center justify-center bg-slate-900 border border-slate-800 rounded-xl hover:border-teal-500 hover:text-white transition-all group"
                 aria-label="Instagram"
               >
-                <Instagram size={18} />
+                <Instagram size={18} className="group-hover:scale-110 transition-transform" />
               </a>
-              {/* <a
-                href="#"
-                className="bg-gray-800 p-2 rounded-lg hover:bg-teal-600 transition"
-                aria-label="LinkedIn"
-              >
-                <Linkedin size={18} />
-              </a> */}
             </div>
           </div>
 
           {/* ---------------------------------------------------------------- */}
-          {/* Quick Links */}
+          {/* Quick Navigation */}
           {/* ---------------------------------------------------------------- */}
           <div>
-            <h4 className="text-white font-bold text-lg mb-4">Quick Links</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <button onClick={() => scrollToSection("home")} className="hover:text-teal-400 transition">
-                  Home
-                </button>
-              </li>
-              <li>
-                <button onClick={() => scrollToSection("about")} className="hover:text-teal-400 transition">
-                  About Us
-                </button>
-              </li>
-              <li>
-                <button onClick={() => scrollToSection("services")} className="hover:text-teal-400 transition">
-                  Services
-                </button>
-              </li>
-              <li>
-                <button onClick={() => scrollToSection("doctors")} className="hover:text-teal-400 transition">
-                  Our Doctors
-                </button>
-              </li>
-              <li>
-                <button onClick={() => scrollToSection("contact")} className="hover:text-teal-400 transition">
-                  Contact
-                </button>
-              </li>
+            <h4 className="text-white font-bold text-sm uppercase tracking-[0.2em] mb-6">Explore</h4>
+            <ul className="space-y-3 text-sm">
+              {["Home", "About", "Services", "Doctors", "Contact"].map((item) => (
+                <li key={item}>
+                  <button 
+                    onClick={() => scrollToSection(item.toLowerCase())} 
+                    className="hover:text-teal-400 transition-colors flex items-center gap-2 group"
+                  >
+                    <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all" />
+                    {item}
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* ---------------------------------------------------------------- */}
-          {/* Our Services */}
+          {/* Clinical Departments */}
           {/* ---------------------------------------------------------------- */}
           <div>
-            <h4 className="text-white font-bold text-lg mb-4">Our Services</h4>
-            <ul className="space-y-2 text-sm">
-              <li><button onClick={() => scrollToSection("services")} className="hover:text-teal-400 transition">Doctor Consultation</button></li>
-              <li><button onClick={() => scrollToSection("services")} className="hover:text-teal-400 transition">Laboratory & Diagnostics</button></li>
-              <li><button onClick={() => scrollToSection("services")} className="hover:text-teal-400 transition">Endoscopy/Colonoscopy</button></li>
-              <li><button onClick={() => scrollToSection("services")} className="hover:text-teal-400 transition">Minor Surgery</button></li>
-              <li><button onClick={() => scrollToSection("services")} className="hover:text-teal-400 transition">Pharmacy</button></li>
-              <li><button onClick={() => scrollToSection("services")} className="hover:text-teal-400 transition">Physiotherapy</button></li>             
-              <li><button onClick={() => scrollToSection("services")} className="hover:text-teal-400 transition">Vaccination</button></li>              
-              <li><button onClick={() => scrollToSection("services")} className="hover:text-teal-400 transition">Sleep Study Lab</button></li>
+            <h4 className="text-white font-bold text-sm uppercase tracking-[0.2em] mb-6">Specialities</h4>
+            <ul className="space-y-3 text-sm">
+              {[
+                "General Medicine",
+                "Cardiology Unit",
+                "Gastroenterology",
+                "General Surgery",
+                "Orthopaedics",
+                "Paediatrics",
+                "Diagnostics",
+                "Sleep Lab"
+              ].map((service) => (
+                <li key={service} className="hover:text-slate-200 transition-colors cursor-pointer">
+                  {service}
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* ---------------------------------------------------------------- */}
-          {/* Contact */}
+          {/* Contact Details */}
           {/* ---------------------------------------------------------------- */}
           <div>
-            <h4 className="text-white font-bold text-lg mb-4">Contact Info</h4>
-            <ul className="space-y-4 text-sm">
+            <h4 className="text-white font-bold text-sm uppercase tracking-[0.2em] mb-6">Contact</h4>
+            <ul className="space-y-5 text-sm">
               <li className="flex items-start gap-3">
-                <MapPin className="text-teal-400 mt-1" size={18} />
+                <MapPin className="text-teal-500 shrink-0" size={18} />
                 <a
                   href="https://maps.app.goo.gl/JQVNpEqLtJK8yTu29"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-teal-400 transition"
+                  className="hover:text-teal-400 transition leading-relaxed"
                 >
-                  AECS Layout, A-Block, Singasandra, Bangalore – 560068
+                  AECS Layout, A-Block, Singasandra, <br /> Bangalore – 560068
                 </a>
               </li>
 
               <li className="flex items-center gap-3">
-                <Phone className="text-teal-400" size={18} />
-                <a href="tel:+918073718255" className="hover:text-teal-400 transition">
+                <Phone className="text-teal-500 shrink-0" size={18} />
+                <a href="tel:+918073718255" className="hover:text-teal-400 font-bold transition">
                   +91 8073718255
                 </a>
               </li>
 
               <li className="flex items-center gap-3">
-                <Mail className="text-teal-400" size={18} />
+                <Mail className="text-teal-500 shrink-0" size={18} />
                 <a
                   href="mailto:healthtreeclinique@gmail.com"
-                  className="hover:text-teal-400 transition"
+                  className="hover:text-teal-400 transition truncate"
                 >
                   healthtreeclinique@gmail.com
                 </a>
@@ -164,18 +147,18 @@ function Footer() {
         </div>
 
         {/* ---------------------------------------------------------------- */}
-        {/* Bottom */}
+        {/* Copyright & Legal */}
         {/* ---------------------------------------------------------------- */}
-        <div className="border-t border-gray-800 pt-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-            <p className="text-gray-400 text-center md:text-left">
-              © 2026 Clinique HealthTree. All rights reserved.
+        <div className="border-t border-slate-900 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-[11px] font-bold uppercase tracking-widest text-slate-600">
+            <p className="text-center md:text-left">
+              © 2026 Clinique HealthTree. Clinical Excellence locally.
             </p>
 
-            <div className="flex gap-6">
-              <a href="#" className="hover:text-teal-400 transition">Privacy Policy</a>
-              <a href="#" className="hover:text-teal-400 transition">Terms of Service</a>
-              <a href="#" className="hover:text-teal-400 transition">Sitemap</a>
+            <div className="flex gap-8">
+              <a href="#" className="hover:text-teal-500 transition">Privacy</a>
+              <a href="#" className="hover:text-teal-500 transition">Terms</a>
+              <a href="#" className="hover:text-teal-500 transition">Sitemap</a>
             </div>
           </div>
         </div>

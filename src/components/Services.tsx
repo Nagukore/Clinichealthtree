@@ -1,143 +1,174 @@
-import { Activity, Baby, Brain, Heart, Pill, Stethoscope, Thermometer, Wind, User, FlaskConical, Syringe, HeartPulse } from 'lucide-react';
+import React from 'react';
+import { 
+  Activity, Baby, Heart, Pill, Stethoscope, Wind, 
+  FlaskConical, Syringe, HeartPulse, Scissors, Droplets, ChevronRight 
+} from 'lucide-react';
+import { motion } from 'framer-motion';
 
 function Services() {
   const services = [
     {
       icon: Heart,
       title: 'Cardiology',
-      description: 'Comprehensive heart care and cardiovascular disease treatment',
-      color: 'bg-red-100',
+      description: 'Expert heart care, ECG, and cardiovascular treatments.',
+      color: 'bg-red-50',
       iconColor: 'text-red-600',
     },
     {
       icon: Baby,
       title: 'Pediatrics',
-      description: 'Specialized care for infants, children, and adolescents',
-      color: 'bg-pink-100',
+      description: 'Specialized neonatal and childhood wellness care.',
+      color: 'bg-pink-50',
       iconColor: 'text-pink-600',
     },
     {
-      icon: Brain,
-      title: 'Mental Health',
-      description: 'Professional mental health support and counseling',
-      color: 'bg-purple-100',
-      iconColor: 'text-purple-600',
+      icon: Droplets,
+      title: 'Gastroenterology',
+      description: 'Advanced liver and digestive health management.',
+      color: 'bg-emerald-50',
+      iconColor: 'text-emerald-600',
+    },
+    {
+      icon: Scissors,
+      title: 'General Surgery',
+      description: 'Laparoscopic and minimal-access surgical expertise.',
+      color: 'bg-orange-50',
+      iconColor: 'text-orange-600',
     },
     {
       icon: Stethoscope,
       title: 'Internal Medicine',
-      description: 'Diagnosis and treatment of adult diseases',
-      color: 'bg-blue-100',
+      description: 'Comprehensive diagnosis for chronic adult diseases.',
+      color: 'bg-blue-50',
       iconColor: 'text-blue-600',
-    },
-    {
-      icon: User,
-      title: 'Gynecology',
-      description: 'Comprehensive womens health and reproductive care',
-      color: 'bg-green-100',
-      iconColor: 'text-green-600',
     },
     {
       icon: Wind,
       title: 'Pulmonology',
-      description: 'Respiratory system and lung disease treatment',
-      color: 'bg-cyan-100',
+      description: 'Respiratory care and sleep apnea diagnostics.',
+      color: 'bg-cyan-50',
       iconColor: 'text-cyan-600',
-    },
-    {
-      icon: Pill,
-      title: 'Pharmacy',
-      description: 'On-site pharmacy with quality medications',
-      color: 'bg-orange-100',
-      iconColor: 'text-orange-600',
-    },
-    {
-      icon: Activity,
-      title: 'Physiotherapy',
-      description: 'Physical rehabilitation and pain management',
-      color: 'bg-teal-100',
-      iconColor: 'text-teal-600',
-    },
-    {
-      icon: Thermometer,
-      title: 'ENT',
-      description: 'Ear, nose, and throat specialist care',
-      color: 'bg-yellow-100',
-      iconColor: 'text-yellow-600',
-    },
-    {
-      icon: Syringe,
-      title: 'Vaccinations',
-      description: 'Flu shots and immunization services',
-      color: 'bg-indigo-100',
-      iconColor: 'text-indigo-600',
     },
     {
       icon: FlaskConical,
       title: 'Lab Tests',
-      description: 'Advanced diagnostic and laboratory testing',
-      color: 'bg-lime-100',
+      description: 'Rapid, verified diagnostic and pathology testing.',
+      color: 'bg-lime-50',
       iconColor: 'text-lime-600',
+    },
+    {
+      icon: Activity,
+      title: 'Physiotherapy',
+      description: 'Pain management and physical rehabilitation.',
+      color: 'bg-teal-50',
+      iconColor: 'text-teal-600',
+    },
+    {
+      icon: Syringe,
+      title: 'Vaccinations',
+      description: 'Complete pediatric and adult immunization programs.',
+      color: 'bg-indigo-50',
+      iconColor: 'text-indigo-600',
+    },
+    {
+      icon: Pill,
+      title: 'Pharmacy',
+      description: 'In-house pharmacy with verified medications.',
+      color: 'bg-amber-50',
+      iconColor: 'text-amber-600',
     },
     {
       icon: HeartPulse,
       title: 'Health Checks',
-      description: 'Comprehensive health screening packages',
-      color: 'bg-rose-100',
+      description: 'Complete preventive health screening packages.',
+      color: 'bg-rose-50',
       iconColor: 'text-rose-600',
     },
   ];
 
   return (
-    <section id="services" className="py-20 bg-gradient-to-b from-gray-50 to-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="bg-teal-100 text-teal-700 px-4 py-2 rounded-full text-sm font-semibold">
-            Our Services
-          </span>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 mb-6">
-            Comprehensive Healthcare Services
+    <section id="services" className="py-24 bg-white relative overflow-hidden">
+      {/* Background Aesthetic Dot Pattern */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
+           style={{ backgroundImage: 'radial-gradient(#0D9488 1.5px, transparent 1.5px)', backgroundSize: '30px 30px' }} />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        {/* Section Header */}
+        <div className="mb-16">
+          <motion.span 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="text-teal-600 font-black text-xs uppercase tracking-[0.3em] mb-4 block"
+          >
+            Clinical Departments
+          </motion.span>
+          <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter max-w-2xl leading-[1.1]">
+            Comprehensive <br />
+            <span className="text-teal-600">Clinical Expertise.</span>
           </h2>
-          <p className="text-lg text-gray-600">
-            We offer a wide range of medical services to meet all your healthcare needs under one roof
-          </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {/* HORIZONTAL GRID LAYOUT */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {services.map((service, index) => {
             const Icon = service.icon;
             return (
-              <div
+              <motion.div
                 key={index}
-                className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 group cursor-pointer border border-gray-100 hover:-translate-y-2"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05 }}
+                className="group flex items-center gap-5 p-5 bg-slate-50/50 rounded-2xl border border-slate-100 hover:bg-white hover:border-teal-200 hover:shadow-xl hover:shadow-teal-900/5 transition-all duration-300 cursor-pointer"
               >
-                <div className={`${service.color} w-16 h-16 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon className={service.iconColor} size={32} />
+                {/* Side Icon Box */}
+                <div className={`${service.color} w-14 h-14 shrink-0 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                  <Icon className={service.iconColor} size={26} />
                 </div>
-                <h3 className="font-bold text-lg text-gray-900 mb-2">
-                  {service.title}
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {service.description}
-                </p>
-              </div>
+                
+                {/* Details Aside Of Icon */}
+                <div className="flex-grow min-w-0">
+                  <h3 className="font-black text-slate-900 text-sm mb-1 group-hover:text-teal-600 transition-colors">
+                    {service.title}
+                  </h3>
+                  <p className="text-slate-500 text-[11px] font-medium leading-relaxed line-clamp-2">
+                    {service.description}
+                  </p>
+                </div>
+
+                {/* Micro Interaction Arrow */}
+                <div className="opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all text-teal-400">
+                   <ChevronRight size={16} />
+                </div>
+              </motion.div>
             );
           })}
         </div>
 
-        <div className="mt-16 bg-gradient-to-br from-teal-600 to-blue-600 rounded-3xl p-8 md:p-12 text-center text-white">
-          <h3 className="text-3xl md:text-4xl font-bold mb-4">
-            Need Emergency Medical Care?
-          </h3>
-          <p className="text-xl text-teal-50 mb-8 max-w-2xl mx-auto">
-            Our emergency services are available . Contact us immediately for urgent medical assistance.
-          </p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <a href="tel:+918073718255" className="bg-white text-teal-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-teal-50 transition shadow-lg hover:shadow-xl">
-              Call Emergency: +91 8073718255
-            </a>
+        {/* Professional CTA Banner */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.98 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          className="mt-16 bg-slate-900 rounded-[2.5rem] p-8 lg:p-12 text-center relative overflow-hidden"
+        >
+          {/* Subtle Glow Background */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl" />
+          
+          <div className="relative z-10">
+            <h3 className="text-2xl md:text-3xl font-black text-white mb-4">
+              Need Urgent Specialist Consultation?
+            </h3>
+            <p className="text-slate-400 text-base mb-8 max-w-xl mx-auto font-medium leading-relaxed">
+              Our specialized emergency wing is prepared for rapid diagnostic intervention and care.
+            </p>
+            <div className="flex justify-center">
+              <a href="tel:+918073718255" className="inline-flex items-center gap-3 bg-teal-500 text-slate-950 px-10 py-4 rounded-2xl font-black text-sm hover:bg-white transition-all shadow-xl shadow-teal-500/20 active:scale-95">
+                Call Direct: +91 8073718255
+              </a>
+            </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

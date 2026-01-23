@@ -68,8 +68,8 @@ const doctors: Doctor[] = [
   {
     id: "dr-sujith-ms",
     name: "Dr. Sujith M S",
-    category: "General Medicine",
-    specialty: "Consultant Physician",
+    category: "General Medicine & Diabetology",
+    specialty: "Consultant Physician & Diabetologist",
     icon: <Stethoscope className="text-teal-600" />,
     experience: "15+ Years",
     education: "MBBS, DNB Internal Medicine, PG Diploma in Diabetes (RCP UK)",
@@ -87,11 +87,11 @@ const doctors: Doctor[] = [
   {
     id: "dr-karthik-sm",
     name: "Dr. Karthik S M",
-    category: "General Medicine",
+    category: "General Medicine & Diabetology",
     specialty: "Internal Medicine Specialist",
     icon: <Activity className="text-teal-600" />,
     experience: "17+ Years",
-    education: "MBBS, MD (Internal Medicine), Diploma in Allergy & Asthma",
+    education: "MBBS, DNB, Diploma in Allergy & Asthma, MRCP",
     philosophy: "Preventive medicine focused on long-term patient wellness.",
     impact: "Specialist in chronic metabolic and respiratory allergy conditions.",
     full: "Dr. Karthik practices personalized medicine with a strong emphasis on allergy, asthma, and lifestyle-related disorders.",
@@ -177,7 +177,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Marathi"],
     whoShouldVisit: "Patients requiring pacemakers or advanced valve consultations.",
     availability: "Mon-Fri: 9 AM - 5 PM",
-    image: "/Dr.Gundurao Harsh Joshi.png",
+    image: "/Dr. Gundu Rao.jpg",
   },
   {
     id: "dr-ashwini-bs",
