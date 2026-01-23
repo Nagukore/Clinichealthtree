@@ -1,321 +1,467 @@
-import React, { useState, useEffect } from "react";
-import { Award, Clock, MapPin, Phone, X } from "lucide-react";
+import React, { useState } from "react";
+import {
+  Award,
+  Clock,
+  Phone,
+  X,
+  ChevronRight,
+  GraduationCap,
+  ShieldCheck,
+  Activity,
+  Heart,
+  Baby,
+  Bone,
+  Droplets,
+  Scan,
+  Languages,
+  CheckCircle2,
+  Stethoscope,
+  Briefcase,
+  Scissors
+} from "lucide-react";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 
-// Placeholder image in case local images fail to load
-const placeholderImage = "https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=2070&auto=format&fit=crop";
+/* ================= TYPES ================= */
 
-const doctors = [
+interface Doctor {
+  id: string;
+  name: string;
+  category: string;
+  specialty: string;
+  icon: React.ReactNode;
+  experience: string;
+  education: string;
+  philosophy: string;
+  impact: string;
+  full: string;
+  expertise: string[];
+  conditions: string[];
+  procedures: string[];
+  languages: string[];
+  whoShouldVisit: string;
+  availability: string;
+  image: string;
+}
+
+/* ================= ANIMATION VARIANTS ================= */
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
+
+/* ================= DATA (Complete 11 Doctors) ================= */
+
+const doctors: Doctor[] = [
   {
     id: "dr-sujith-ms",
     name: "Dr. Sujith M S",
+    category: "General Medicine",
     specialty: "Consultant Physician",
-    experience: "15+ years",
-    education: "MBBS, DNB Internal Medicine, PG Diploma in Diabetes & Endocrinology (RCP UK)",
-    short: "Experienced general physician with strong diagnostic skills and a focus on diabetes, thyroid and infectious diseases.",
-    full: `Dr. Sujith M. S completed MBBS from Shimoga Institute of Medical Science and Research Centre and DNB in Internal Medicine from Narayana Hrudayalaya, Bengaluru. He is known for his patience and diagnostic skills. Special interests include Respiratory Diseases, Infectious diseases including COVID-19, Hypertension, Diabetes Mellitus, Thyroid disorders, Dyslipidemia and many other medical conditions. Member of the American College of Physicians.`,
-    expertise: ["Respiratory Diseases & Allergies", "Infectious diseases", "Hypertension & Cardiovascular Health", "Diabetes & Thyroid disorders", "Dyslipidemia"],
-    availability: "Mon-Sat: 9AM-8PM",
-    image: "/Sujith.jpg"
+    icon: <Stethoscope className="text-teal-600" />,
+    experience: "15+ Years",
+    education: "MBBS, DNB Internal Medicine, PG Diploma in Diabetes (RCP UK)",
+    philosophy: "Precision diagnosis through evidence-based clinical protocols.",
+    impact: "Expert in multi-system medical disorders and structured long-term care.",
+    full: "Dr. Sujith is a senior consultant known for high diagnostic accuracy. He specializes in managing complex chronic diseases with a focus on long-term health optimization.",
+    expertise: ["Diabetes & Thyroid", "Infectious Diseases", "Hypertension", "Respiratory"],
+    conditions: ["Uncontrolled Diabetes", "Thyroid Disorders", "Chronic Fatigue", "Hypertension"],
+    procedures: ["Health Screenings", "Diabetes Optimization", "Infectious Disease Management"],
+    languages: ["English", "Kannada", "Hindi"],
+    whoShouldVisit: "Adults with lifestyle diseases, recurrent infections, or chronic fatigue.",
+    availability: "Mon–Sat: 9 AM – 8 PM",
+    image: "/Sujith.jpg",
   },
   {
     id: "dr-karthik-sm",
     name: "Dr. Karthik S M",
-    specialty: "Internal Medicine",
-    experience: "10+ years",
-    education: "MBBS, MD (Internal Medicine), Diploma in Diabetes Management, Diploma in Allergy & Asthma",
-    short: "Practices evidence-based, patient-centric medicine. Focused on infectious diseases, allergy, asthma and diabetes.",
-    full: `Dr Karthik believes in practising evidence-based medicine which is patient-centric and personalized. He works with patients as a team to deliver effective treatment plans. Areas of interest include infectious diseases, allergy & asthma, diabetes, hypertension, cardiovascular diseases, smoking cessation and preventive medicine.`,
-    expertise: ["Infectious Diseases", "Allergy & Asthma Management", "Diabetes and Hypertension", "Cardiovascular Diseases", "Preventive Medicine"],
-    availability: "Mon-Sat: 9AM-6PM",
-    image: "/Dr. Karthik S M.png"
+    category: "General Medicine",
+    specialty: "Internal Medicine Specialist",
+    icon: <Activity className="text-teal-600" />,
+    experience: "17+ Years",
+    education: "MBBS, MD (Internal Medicine), Diploma in Allergy & Asthma",
+    philosophy: "Preventive medicine focused on long-term patient wellness.",
+    impact: "Specialist in chronic metabolic and respiratory allergy conditions.",
+    full: "Dr. Karthik practices personalized medicine with a strong emphasis on allergy, asthma, and lifestyle-related disorders.",
+    expertise: ["Allergy & Asthma", "Preventive Health", "Metabolic Disorders"],
+    conditions: ["Asthma", "Allergic Rhinitis", "Metabolic Syndrome", "Chronic Cough"],
+    procedures: ["Allergy Testing", "Asthma Control Planning", "Cardiac Risk Screening"],
+    languages: ["English", "Kannada", "Hindi"],
+    whoShouldVisit: "Patients with chronic allergies, asthma, or metabolic health concerns.",
+    availability: "Mon–Sat: 9 AM – 1:30 PM",
+    image: "/Dr. Karthik S M.png",
   },
   {
     id: "dr-sagar",
     name: "Dr. Sagar",
-    specialty: "Pulmonologist",
-    experience: "11 years",
-    education: "MBBS, DTCD, DNB in Respiratory Diseases",
-    short: "Pulmonologist experienced in asthma, COPD, sleep-related breathing disorders and complex lung diseases.",
-    full: `Dr. Sagar specializes in Upper respiratory tract infections, Allergic rhinitis, Sinusitis, Bronchial Asthma, COPD, Interstitial lung disease, Sleep related breathing disorders (including OSA), Lung cancer, Tuberculosis, Pulmonary Hypertension and Pulmonary thromboembolism.`,
-    expertise: ["Asthma and COPD Management", "Sleep-Related Breathing Disorders (OSA)", "Interstitial Lung Disease", "Tuberculosis and Lung Cancer"],
-    availability: "Mon-Fri: 10AM-6PM",
-    image: "/Sagar.png"
+    category: "Pulmonology",
+    specialty: "Consultant Pulmonologist",
+    icon: <Activity className="text-blue-600" />,
+    experience: "11+ Years",
+    education: "MBBS, DTCD, DNB (Respiratory Medicine)",
+    philosophy: "Restoring respiratory freedom through advanced sleep science.",
+    impact: "Established advanced protocols for sleep apnea and COPD.",
+    full: "Dr. Sagar manages the full spectrum of respiratory diseases including asthma, COPD, and sleep-related breathing disorders.",
+    expertise: ["Sleep Apnea (OSA)", "COPD", "Interstitial Lung Disease"],
+    conditions: ["Snoring", "Chronic Breathlessness", "Tuberculosis", "Lung Infections"],
+    procedures: ["Pulmonary Function Tests", "Sleep Studies", "Bronchoscopy Guidance"],
+    languages: ["English", "Kannada", "Hindi"],
+    whoShouldVisit: "Anyone with sleep snoring, chronic cough, or breathing difficulties.",
+    availability: "Mon–Fri: 10 AM – 6 PM",
+    image: "/Sagar.JPG",
   },
   {
     id: "dr-babu-reddy",
     name: "Dr. Babu Reddy",
-    specialty: "Cardiologist",
-    experience: "12 years",
+    category: "Cardiology",
+    specialty: "Interventional Cardiologist",
+    icon: <Heart className="text-red-500" />,
+    experience: "23+ Years",
     education: "MBBS, MD (General Medicine), DNB (Cardiology)",
-    short: "Cardiologist with extensive experience in interventions and teaching. Skilled in complex cardiac care.",
-    full: `Dr Babu Reddy is a Cardiologist with 12 years experience. He did MBBS from Bangalore Medical College, MD in General Medicine from Government Medical College – Bellary and DNB in Cardiology from Amrita Institute of Medical Sciences & Research.`,
-    expertise: ["Interventional Cardiology", "Complex Cardiac Care", "General Medicine"],
-    availability: "Tue- Sat: 10AM-5PM",
-    image: "/Dr. Babu Reddy.png"
+    philosophy: "Aggressive cardiac stabilization and precision intervention.",
+    impact: "Successfully performed thousands of life-saving angioplasties.",
+    full: "A veteran cardiologist formerly at Sri Jayadeva Institute, specializing in complex coronary stenting and heart failure.",
+    expertise: ["Angioplasty", "Stenting", "Heart Failure", "Vascular Disease"],
+    conditions: ["Chest Pain", "Heart Attack", "Heart Failure", "Palpitations"],
+    procedures: ["Coronary Angiography", "Angioplasty", "Pacemaker Guidance"],
+    languages: ["English", "Kannada", "Telugu"],
+    whoShouldVisit: "Patients with chest pain, heart conditions, or history of cardiac issues.",
+    availability: "Tue-Sat: 10 AM - 5 PM",
+    image: "/Dr. Babureddy.jpg",
   },
   {
     id: "dr-rajendra-reddy",
     name: "Dr. Rajendra Reddy",
-    specialty: "Orthopaedic Surgeon",
-    experience: "26+ years",
-    education: "MBBS, Fellowship in Paediatric Orthopaedics (France)",
-    short: "Senior orthopaedic consultant specializing in trauma, deformity correction and paediatric orthopaedics.",
-    full: `Dr. Rajendra Reddy is a Senior Orthopaedic Consultant with over 26 years of experience. He specializes in arthroplasty, spinal surgeries, deformity corrections, pediatric orthopaedics, complex trauma, Ilizarov procedures and limb lengthening.`,
-    expertise: ["Arthroplasty and Spinal Surgeries", "Paediatric Orthopaedics", "Deformity Corrections (Ilizarov)", "Complex Trauma and Limb Lengthening"],
-    availability: "Mon-Thu: 9AM-4PM",
-    image: "/Dr. Rajendra Reddy.png"
+    category: "Orthopaedics",
+    specialty: "Senior Orthopaedic Surgeon",
+    icon: <Bone className="text-amber-600" />,
+    experience: "26+ Years",
+    education: "MBBS, MS (Orthopaedics), Fellowship in Paediatric Ortho (France)",
+    philosophy: "Restoring peak mobility through surgical precision.",
+    impact: "Regional pioneer in limb-lengthening and deformity correction.",
+    full: "Dr. Reddy specializes in trauma, joint replacements, and paediatric bone deformities using international techniques.",
+    expertise: ["Joint Replacement", "Spinal Surgery", "Paediatric Ortho"],
+    conditions: ["Arthritis", "Bone Deformities", "Fractures", "Scoliosis"],
+    procedures: ["Hip/Knee Replacement", "Spine Surgery", "Ilizarov Deformity Correction"],
+    languages: ["English", "Kannada", "Hindi", "French"],
+    whoShouldVisit: "Patients with chronic joint pain, fractures, or bone deformities.",
+    availability: "Mon–Thu: 9 AM – 4 PM",
+    image: "/Dr. Rajendra Reddy.png",
   },
   {
     id: "dr-gundurao-hj",
     name: "Dr. Gundurao Harsh Joshi",
-    specialty: "Cardiologist",
-    experience: "8 years",
-    education: "MBBS, MD (Medicine), DM Cardio",
-    short: "Consultant cardiologist experienced in interventional and non-interventional cardiology and echo.",
-    full: `Dr. Gundurao Harsh Joshi has 8 years experience and works as Consultant Cardiologist at Narayana Hrudayalaya HSR. Expertise includes interventional cardiology, coronary angioplasty, echocardiography and heart failure management.`,
-    expertise: ["Interventional Cardiology", "Echocardiography", "Heart Failure Management", "Non-interventional Cardiology"],
-    availability: "Mon-Fri: 9AM-5PM",
-    image: "/Dr.Gundurao Harsh Joshi.png"
+    category: "Cardiology",
+    specialty: "Consultant Cardiologist",
+    icon: <Heart className="text-red-500" />,
+    experience: "16+ Years",
+    education: "MBBS, MD (Medicine), DM (Cardiology)",
+    philosophy: "Integrating advanced imaging for superior cardiac outcomes.",
+    impact: "Expert in Rotablation and modern pacemaker technology.",
+    full: "Specialist in primary coronary interventions and advanced valve treatments (TAVI).",
+    expertise: ["IVL Angioplasty", "Pacemakers", "Echocardiography"],
+    conditions: ["Valvular Heart Disease", "Arrhythmia", "Blocked Arteries"],
+    procedures: ["TAVI Guidance", "Pacemaker Implantation", "Rotablation"],
+    languages: ["English", "Kannada", "Marathi"],
+    whoShouldVisit: "Patients requiring pacemakers or advanced valve consultations.",
+    availability: "Mon-Fri: 9 AM - 5 PM",
+    image: "/Dr.Gundurao Harsh Joshi.png",
   },
   {
     id: "dr-ashwini-bs",
     name: "Dr. Ashwini B S",
-    specialty: "Paediatrician",
-    experience: "DNB (Pediatrics)",
-    education: "MBBS (SIMS), DCH (BMCRI), DNB Pediatrics",
-    short: "Paediatrician with strong background in neonatal & childhood health, growth and development.",
-    full: `Dr. Ashwini B S has presented research at national and international conferences, and has strong expertise in neonatal care, growth & development, nutrition, immunisation, infections, allergy and asthma.`,
-    expertise: ["Neonatal Care", "Growth & Development Monitoring", "Childhood Nutrition", "Infections, Allergy and Asthma"],
-    availability: "Mon-Sat: 9AM-1PM",
-    image: "/Ashwini.jpg"
+    category: "Paediatrics",
+    specialty: "Consultant Paediatrician",
+    icon: <Baby className="text-pink-500" />,
+    experience: "12+ Years",
+    education: "MBBS, DCH, DNB Pediatrics",
+    philosophy: "Compassionate care for every stage of childhood growth.",
+    impact: "Recognized expert in neonatal nutrition and growth evaluation.",
+    full: "Dr. Ashwini provides comprehensive care for newborns and children, focusing on immunisation and allergy management.",
+    expertise: ["Neonatal Care", "Immunisation", "Pediatric Allergy"],
+    conditions: ["Growth Delays", "Childhood Infections", "Newborn Wellness"],
+    procedures: ["Vaccination", "Growth Monitoring", "Nutrition Assessment"],
+    languages: ["English", "Kannada", "Hindi"],
+    whoShouldVisit: "Parents seeking wellness checks or medical care for infants and children.",
+    availability: "Mon–Sat: 9 AM – 1 PM",
+    image: "/Ashwini.jpg",
   },
   {
     id: "dr-sujit-j",
     name: "Dr. Sujit J",
-    specialty: "Radiologist",
-    experience: "8 years",
-    education: "MBBS, MDRD (Radiology)",
-    short: "Consultant radiologist experienced in obstetric, fetal and pediatric sonography.",
-    full: `Dr. Sujit provides services in general body ultrasonography, obstetric, musculoskeletal, pediatric and peripheral doppler scans. Special expertise in fetal sonography and fetal echocardiography.`,
-    expertise: ["Obstetric & Fetal Sonography", "Pediatric Sonography", "General Body Ultrasonography", "Peripheral Doppler Scans"],
-    availability: "Tue-Sat: 10AM-4PM",
-    image: "/Dr. Sujith J.png"
+    category: "Radiology",
+    specialty: "Consultant Radiologist",
+    icon: <Scan className="text-indigo-600" />,
+    experience: "17+ Years",
+    education: "MBBS, MD (Radio Diagnosis)",
+    philosophy: "High-fidelity imaging as the foundation of accurate treatment.",
+    impact: "Specialist in obstetric and specialized fetal echocardiography.",
+    full: "Provides precision imaging services including 3D/4D scans and musculoskeletal doppler studies.",
+    expertise: ["Fetal Echo", "Doppler Studies", "3D/4D Ultrasound"],
+    conditions: ["Pregnancy Anomalies", "Vascular Issues", "Musculoskeletal Pain"],
+    procedures: ["Fetal Echo", "Anomaly Scans", "Peripheral Doppler"],
+    languages: ["English", "Kannada", "Hindi"],
+    whoShouldVisit: "Expectant mothers or patients requiring specialized diagnostic scans.",
+    availability: "Tue-Sat: 10 AM - 4 PM",
+    image: "/Dr. Sujith J.jpg",
   },
   {
     id: "dr-pramod-kumar",
     name: "Dr. Pramod Kumar D A",
-    specialty: "Hepatologist / Liver Transplant Physician",
+    category: "Hepatology",
+    specialty: "Liver Specialist / Transplant Physician",
+    icon: <Droplets className="text-emerald-600" />,
     experience: "Senior Consultant",
-    education: "MD (Internal Medicine), DM (Hepatology) — PGIMER Chandigarh",
-    short: "Expert hepatologist with extensive transplant experience and many high-impact publications.",
-    full: `Dr. Pramod Kumar is trained in managing complex liver diseases, refractory ascites, liver cancer, alcohol-related liver disease and liver transplant patients. He has 50+ publications and multiple recognitions.`,
-    expertise: ["Liver Transplant Management", "Complex Liver Diseases", "Refractory Ascites", "Liver Cancer"],
-    availability: "By appointment",
-    image: "/Dr. pramod.png"
+    education: "MD, DM (Hepatology) - PGIMER Chandigarh",
+    philosophy: "Evidence-based management of complex liver disorders.",
+    impact: "Leader in post-liver transplant care and liver cancer management.",
+    full: "National expert in managing viral hepatitis, cirrhosis, and pre-transplant workups.",
+    expertise: ["Liver Transplant", "Liver Cancer", "Cirrhosis"],
+    conditions: ["Fatty Liver", "Jaundice", "Hepatitis", "Ascites"],
+    procedures: ["Transplant Evaluation", "Liver Biopsy Guidance", "Cancer Screening"],
+    languages: ["English", "Hindi", "Punjabi"],
+    whoShouldVisit: "Patients with liver disease, chronic jaundice, or transplant needs.",
+    availability: "By Appointment",
+    image: "/Dr. pramod.png",
+  },
+  {
+    id: "dr-sachin-subbaraya",
+    name: "Dr. Sachin Subbaraya",
+    category: "General Surgery",
+    specialty: "Associate Consultant, Gastrointestinal Surgery",
+    icon: <Scissors className="text-orange-600" />,
+    experience: "10+ Years",
+    education: "MBBS, MS (General Surgery), FIAGES, FMAS",
+    philosophy: "Minimizing recovery times and scarring through cutting-edge technology.",
+    impact: "Expert in minimal-access surgery for a wide range of abdominal conditions.",
+    full: "After pursuing an M.B.B.S degree and MS General Surgery from MS Ramaiah Institute, he served as a Senior Resident at Apollo Hospital and Associate Consultant at Manipal Hospital. He is known for individualized care and attention to each patient's needs.",
+    expertise: ["Laparoscopic Surgery", "Laser Proctology", "EVLT specialist", "Advanced GI Surgery"],
+    conditions: ["Gallbladder Stone", "Hernia Repair", "Varicose Veins", "Appendectomy"],
+    procedures: ["Laparoscopic Surgery", "Laser Proctology", "Minimal-access Surgery", "Surgical Consultation"],
+    languages: ["English", "Kannada", "Hindi"],
+    whoShouldVisit: "Patients requiring advanced surgical intervention for abdominal or vascular issues.",
+    availability: "By Appointment",
+    image: "/Dr. Sachin.jpg",
+  },
+  {
+    id: "dr-nikhil-bondade",
+    name: "Dr. Nikhil Bondade",
+    category: "Gastroenterology",
+    specialty: "Medical Gastroenterologist & Hepatologist",
+    icon: <Activity className="text-emerald-600" />,
+    experience: "Specialist",
+    education: "M.D Internal Medicine (JJMMC), Super Speciality in Medical Gastroenterology (PSG), Fellowship in Advanced Endoscopy (BIDS Mumbai)",
+    philosophy: "Holistic management of liver and digestive health through advanced diagnostic technology.",
+    impact: "Expertised in diagnostic and therapeutic endoscopy and liver cirrhosis management.",
+    full: "Dr. Nikhil Bondade completed his M.D at JJMMC Davanagere and Super Speciality at PSG Coimbatore. He holds a Post Doctoral fellowship in Advanced therapeutic Endoscopy from BIDS Mumbai.",
+    expertise: ["Therapeutic Endoscopy", "Hepatology", "Liver Diseases", "Pancreatitis"],
+    conditions: ["Liver Cirrhosis", "Fatty Liver", "Pancreatitis", "Gall Bladder Pathology", "Gastrointestinal Diseases"],
+    procedures: ["Diagnostic Endoscopy", "Colonoscopy", "Fibroscan", "ERCP"],
+    languages: ["English", "Kannada", "Marathi"],
+    whoShouldVisit: "Patients seeking expert care for liver diseases, gall bladder issues, or gastrointestinal screening.",
+    availability: "By Appointment",
+    image: "/Nikhil.jpg",
   }
 ];
 
-export default function Doctors() {
-  const [selectedDoctor, setSelectedDoctor] = useState(null);
+/* ================= COMPONENT ================= */
 
-  // Close modal on ESC and prevent background scroll
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape") setSelectedDoctor(null);
-    };
-
-    if (selectedDoctor) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "unset";
-    };
-  }, [selectedDoctor]);
+export default function DoctorsSection() {
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
 
   return (
-    <section id="doctors" className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="bg-teal-100 text-teal-700 px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider">
-            Our Doctors
-          </span>
-          <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mt-6 mb-4">
-            Meet Our Expert Healthcare Professionals
+    <section id="doctors" className="py-16 bg-slate-50 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4">
+
+        {/* COMPACT SECTION HEADER */}
+        <div className="text-center mb-12">
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-100 border border-teal-200 mb-4"
+          >
+            <ShieldCheck size={14} className="text-teal-700" />
+            <span className="text-teal-800 text-[10px] font-black uppercase tracking-widest">
+              Board Certified Specialists
+            </span>
+          </motion.div>
+          <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
+            Meet Our <span className="text-teal-600">Expert Team</span>
           </h2>
-          <p className="text-lg text-gray-600">
-            Dedicated to providing you with the highest standard of medical care.
-          </p>
         </div>
 
-        {/* Doctors Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* DOCTORS GRID */}
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
           {doctors.map((doc) => (
-            <article
+            <motion.article
               key={doc.id}
-              className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col"
+              variants={cardVariants}
+              whileHover={{ y: -5 }}
+              className="bg-white rounded-[1.5rem] shadow-sm hover:shadow-xl border border-slate-200 flex flex-col overflow-hidden transition-all duration-300 group"
             >
-              <div className="relative h-80 overflow-hidden bg-gray-200">
+              {/* IMAGE CONTAINER */}
+              <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100 relative">
                 <img
                   src={doc.image}
                   alt={doc.name}
-                  className="w-full h-full object-contain bg-gray-100"
+                  className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                  onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/400x300?text=HealthTree+Specialist'; }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                <div className="absolute bottom-4 left-4 right-4">
-                  <h3 className="text-xl font-bold text-white">{doc.name}</h3>
-                  <p className="text-teal-300 font-medium">{doc.specialty}</p>
+                <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-0.5 rounded-lg border border-slate-100 shadow-sm">
+                   <span className="text-[10px] font-black text-slate-500 uppercase">{doc.experience}</span>
                 </div>
               </div>
 
-              <div className="p-6 flex-grow flex flex-col justify-between">
-                <div>
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">{doc.short}</p>
-                  <div className="flex items-start gap-2 text-gray-700 text-xs mb-4">
-                    <Award className="text-teal-600 shrink-0" size={16} />
-                    <span className="line-clamp-2">{doc.education}</span>
-                  </div>
+              {/* CONTENT PADDING */}
+              <div className="p-5 flex flex-col flex-grow">
+                <div className="flex items-center gap-1.5 mb-1.5">
+                  <div className="p-1 bg-teal-50 rounded-md shrink-0">{doc.icon}</div>
+                  <span className="text-[10px] font-bold text-teal-600 uppercase tracking-wider">{doc.category}</span>
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-gray-50">
-                  <div className="flex items-center gap-1.5 text-gray-500 text-xs">
-                    <Clock size={14} className="text-teal-600" />
-                    <span>{doc.availability.split(':')[0]}...</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setSelectedDoctor(doc)}
-                      className="bg-teal-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-teal-700 transition"
-                    >
-                      Read More
-                    </button>
-                  </div>
-                </div>
+                <h3 className="text-lg font-black text-slate-900 mb-0.5">{doc.name}</h3>
+                <p className="text-slate-500 font-bold text-xs mb-3 leading-tight min-h-[2.5rem]">
+                  {doc.specialty}
+                </p>
+
+                <p className="text-[11px] text-slate-500 mb-6 line-clamp-2 leading-relaxed min-h-[2.5rem]">
+                  {doc.impact}
+                </p>
+
+                <button
+                  onClick={() => setSelectedDoctor(doc)}
+                  className="mt-auto w-full py-3 bg-slate-900 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-teal-600 transition-colors shadow-sm"
+                >
+                  View Clinical Profile
+                  <ChevronRight size={14} />
+                </button>
               </div>
-            </article>
+            </motion.article>
           ))}
-        </div>
-
-        {/* Appointment CTA */}
-        <div className="mt-16 bg-teal-900 rounded-3xl p-8 md:p-12 text-white text-center">
-          <h3 className="text-2xl md:text-3xl font-bold mb-4">Skip The Waiting Room!</h3>
-          <p className="text-teal-100 mb-8 max-w-2xl mx-auto">
-            Register online before you arrive. Save time and get the care you need promptly.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="#contact" className="bg-white text-teal-900 px-8 py-3 rounded-full font-bold hover:bg-teal-50 transition">
-              Book Appointment
-            </a>
-            <button onClick={() => window.location.href = 'tel:+918041663537'} className="border-2 border-white px-8 py-3 rounded-full font-bold hover:bg-white/10 transition">
-              Call Us Now
-            </button>
-          </div>
-        </div>
+        </motion.div>
       </div>
 
-      {/* Modal Overlay */}
-      {selectedDoctor && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div 
-            className="absolute inset-0 bg-gray-900/80 backdrop-blur-sm"
-            onClick={() => setSelectedDoctor(null)}
-          />
-          
-          <div className="relative bg-white w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b">
-              <div className="flex items-center gap-4">
-                <img 
-                  src={selectedDoctor.image} 
-                  alt={selectedDoctor.name}
-                  className="w-16 h-16 rounded-xl object-contain bg-gray-100"
-                />
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900">{selectedDoctor.name}</h2>
-                  <p className="text-teal-600 font-semibold">{selectedDoctor.specialty}</p>
+      {/* DETAILED PROFESSIONAL MODAL */}
+      <AnimatePresence>
+        {selectedDoctor && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-white max-w-5xl w-full rounded-[2.5rem] flex flex-col md:flex-row overflow-hidden max-h-[90vh] shadow-2xl"
+            >
+              {/* Modal Left Sidebar */}
+              <div className="md:w-80 bg-slate-50 p-6 border-r flex flex-col">
+                <div className="aspect-square rounded-2xl overflow-hidden mb-6 shadow-md border-4 border-white">
+                  <img src={selectedDoctor.image} className="w-full h-full object-cover object-top" alt={selectedDoctor.name} />
                 </div>
-              </div>
-              <button 
-                onClick={() => setSelectedDoctor(null)}
-                className="p-2 hover:bg-gray-100 rounded-full transition"
-                aria-label="Close modal"
-              >
-                <X size={24} />
-              </button>
-            </div>
-
-            {/* Modal Content */}
-            <div className="overflow-y-auto p-6 md:p-10">
-              <div className="grid md:grid-cols-3 gap-10">
-                <div className="md:col-span-2 space-y-8">
-                  <section>
-                    <h4 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-                      About the Doctor
-                    </h4>
-                    <p className="text-gray-600 leading-relaxed text-lg">
-                      {selectedDoctor.full}
-                    </p>
-                  </section>
-
-                  {selectedDoctor.expertise && (
-                    <section>
-                      <h4 className="text-lg font-bold text-gray-900 mb-4">Areas of Expertise</h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {selectedDoctor.expertise.map((item, idx) => (
-                          <div key={idx} className="flex items-center gap-2 text-gray-700 bg-teal-50 p-3 rounded-lg border border-teal-100">
-                            <div className="w-1.5 h-1.5 rounded-full bg-teal-500" />
-                            <span className="text-sm font-medium">{item}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </section>
-                  )}
-                </div>
-
-                {/* Sidebar Info */}
-                <div className="space-y-6">
-                  <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 space-y-5">
-                    <div className="flex gap-3">
-                      <Clock className="text-teal-600 shrink-0" size={20} />
-                      <div>
-                        <p className="text-xs text-gray-400 uppercase font-bold">Availability</p>
-                        <p className="text-sm font-semibold text-gray-800">{selectedDoctor.availability}</p>
-                      </div>
+                <div className="space-y-4 flex-grow">
+                  <div className="flex gap-3 items-center">
+                    <Award className="text-teal-600 shrink-0" size={18} />
+                    <div>
+                      <p className="text-[9px] font-black uppercase text-slate-400 leading-none mb-1">Experience</p>
+                      <p className="font-bold text-slate-800 text-sm leading-none">{selectedDoctor.experience}</p>
                     </div>
-                    <div className="flex gap-3">
-                      <Award className="text-teal-600 shrink-0" size={20} />
-                      <div>
-                        <p className="text-xs text-gray-400 uppercase font-bold">Experience</p>
-                        <p className="text-sm font-semibold text-gray-800">{selectedDoctor.experience}</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-3">
-                      <MapPin className="text-teal-600 shrink-0" size={20} />
-                      <div>
-                        <p className="text-xs text-gray-400 uppercase font-bold">Location</p>
-                        <p className="text-sm font-semibold text-gray-800">HealthTree Clinic, Singasandra</p>
-                      </div>
-                    </div>
-                    <div className="pt-4 space-y-3">
-                      <a href="tel:+918041663537" className="flex items-center justify-center gap-2 w-full bg-teal-600 text-white py-3 rounded-xl font-bold hover:bg-teal-700 transition">
-                        <Phone size={18} /> Call Now
-                      </a>
-                      <button onClick={() => setSelectedDoctor(null)} className="w-full border-2 border-teal-600 text-teal-600 py-3 rounded-xl font-bold hover:bg-teal-50 transition">
-                        Book Online
-                      </button>
+                  </div>
+                  <div className="flex gap-3 items-start">
+                    <GraduationCap className="text-teal-600 shrink-0" size={18} />
+                    <div>
+                      <p className="text-[9px] font-black uppercase text-slate-400 leading-none mb-1">Education</p>
+                      <p className="font-bold text-[11px] leading-tight text-slate-800">{selectedDoctor.education}</p>
                     </div>
                   </div>
                 </div>
+                <div className="mt-8 pt-6 border-t border-slate-200">
+                    <div className="flex items-center gap-2 mb-3">
+                        <Clock className="text-teal-600" size={16} />
+                        <span className="text-[11px] font-bold text-slate-600">{selectedDoctor.availability}</span>
+                    </div>
+                </div>
               </div>
-            </div>
+
+              {/* Modal Main Content Area */}
+              <div className="flex-1 flex flex-col min-w-0">
+                <div className="p-6 border-b flex justify-between items-center bg-white sticky top-0 z-10">
+                  <div>
+                    <h2 className="text-2xl font-black text-slate-900 mb-1 leading-none">{selectedDoctor.name}</h2>
+                    <p className="text-teal-600 font-bold text-sm leading-none">{selectedDoctor.specialty}</p>
+                  </div>
+                  <button onClick={() => setSelectedDoctor(null)} className="p-2 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors">
+                    <X size={20} className="text-slate-500" />
+                  </button>
+                </div>
+
+                <div className="p-8 overflow-y-auto space-y-8 bg-white">
+                  <section>
+                    <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">Clinical Profile</h4>
+                    <p className="text-sm text-slate-700 leading-relaxed font-medium">{selectedDoctor.full}</p>
+                  </section>
+
+                  <section className="bg-teal-50/50 p-5 rounded-2xl border border-teal-100">
+                    <h4 className="text-[10px] font-black uppercase tracking-widest text-teal-700 mb-3 flex items-center gap-2">
+                      <CheckCircle2 size={14} /> Clinical Mastery
+                    </h4>
+                    <p className="text-teal-900 text-xs font-bold leading-relaxed">{selectedDoctor.whoShouldVisit}</p>
+                  </section>
+
+                  <div className="grid sm:grid-cols-2 gap-8">
+                    <div>
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
+                        <Activity size={12} /> Specialization
+                      </h4>
+                      <ul className="space-y-2">
+                        {selectedDoctor.conditions.map((c, i) => (
+                          <li key={i} className="flex items-center gap-2 text-[11px] font-bold text-slate-700">
+                            <div className="w-1 h-1 rounded-full bg-teal-500" /> {c}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
+                        <Briefcase size={12} /> Procedures
+                      </h4>
+                      <ul className="space-y-2">
+                        {selectedDoctor.procedures.map((p, i) => (
+                          <li key={i} className="flex items-center gap-2 text-[11px] font-bold text-slate-700">
+                            <div className="w-1 h-1 rounded-full bg-slate-400" /> {p}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="pt-8 border-t border-slate-100">
+                    <a href="tel:+918041663537" className="w-full bg-teal-600 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-teal-700 transition-all shadow-lg shadow-teal-100">
+                      <Phone size={18} /> Call Clinic Office
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </section>
   );
 }

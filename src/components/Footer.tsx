@@ -153,10 +153,10 @@ function Footer() {
               <li className="flex items-center gap-3">
                 <Mail className="text-teal-400" size={18} />
                 <a
-                  href="mailto:healthtreeclinic@gmail.com"
+                  href="mailto:healthtreeclinique@gmail.com"
                   className="hover:text-teal-400 transition"
                 >
-                  healthtreeclinic@gmail.com
+                  healthtreeclinique@gmail.com
                 </a>
               </li>
             </ul>

@@ -130,11 +130,11 @@ function Services() {
             Need Emergency Medical Care?
           </h3>
           <p className="text-xl text-teal-50 mb-8 max-w-2xl mx-auto">
-            Our emergency services are available 24/7. Contact us immediately for urgent medical assistance.
+            Our emergency services are available . Contact us immediately for urgent medical assistance.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <a href="tel:+918041663537" className="bg-white text-teal-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-teal-50 transition shadow-lg hover:shadow-xl">
-              Call Emergency: +91 8041663537
+            <a href="tel:+918073718255" className="bg-white text-teal-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-teal-50 transition shadow-lg hover:shadow-xl">
+              Call Emergency: +91 8073718255
             </a>
           </div>
         </div>

@@ -35,7 +35,7 @@ function About() {
                     <Award className="text-teal-600" size={24} />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-gray-900">15+</p>
+                    <p className="text-2xl font-bold text-gray-900">10+</p>
                     <p className="text-sm text-gray-600">Years of Excellence</p>
                   </div>
                 </div>
@@ -47,7 +47,7 @@ function About() {
                     <Users className="text-blue-600" size={24} />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-gray-900">30+</p>
+                    <p className="text-2xl font-bold text-gray-900">20+</p>
                     <p className="text-sm text-gray-600">Qualified Specialists</p>
                   </div>
                 </div>
