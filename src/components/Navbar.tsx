@@ -38,13 +38,13 @@ function Navbar() {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <Phone size={16} />
-              <a href="tel:+918041663537" className="hover:text-teal-200 transition">
-                +91 8041663537
+              <a href="tel:+918073718255" className="hover:text-teal-200 transition">
+                +91 8073718255
               </a>
             </div>
             <div className="hidden md:flex items-center gap-2">
               <Clock size={16} />
-              <span>Mon - Sat: 9:00 AM - 8:00 PM</span>
+              <span>Mon - Sat: 7:00 AM - 10:00 PM</span>
             </div>
           </div>
 
