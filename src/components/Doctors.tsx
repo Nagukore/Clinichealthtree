@@ -272,7 +272,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Marathi"],
     whoShouldVisit: "Patients seeking expert care for liver diseases, gall bladder issues, or gastrointestinal screening.",
     availability: "By Appointment",
-    image: "/Nikhil.jpg",
+    image: "/Nikhil.jpeg",
   }
 ];
 
