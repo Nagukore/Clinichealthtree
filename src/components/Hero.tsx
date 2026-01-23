@@ -131,7 +131,7 @@ export default function Hero() {
                 <button
                   key={idx}
                   onClick={() => setCurrent(idx)}
-                  className={`rounded-full transition-all duration-300 ${
+                  className={`rounded-full transition-all duration-500 ${
                     idx === current ? "bg-white w-8 h-2" : "bg-white/40 w-2 h-2"
                   }`}
                   aria-label={`Go to slide ${idx + 1}`}
