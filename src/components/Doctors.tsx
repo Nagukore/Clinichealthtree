@@ -624,10 +624,10 @@ export default function DoctorsSection() {
               initial={{ opacity: 0, scale: 0.9, y: 40 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 40 }}
-              className="bg-white max-w-5xl w-full rounded-[3rem] flex flex-col md:flex-row overflow-hidden max-h-[90vh] shadow-2xl"
+              className="bg-white max-w-5xl w-full rounded-[3rem] flex flex-col md:flex-row overflow-y-auto md:overflow-hidden max-h-[90vh] shadow-2xl"
             >
               {/* MODAL SIDEBAR */}
-              <div className="md:w-80 bg-slate-50 p-8 border-r flex flex-col">
+              <div className="md:w-80 bg-slate-50 p-8 border-b md:border-r flex flex-col md:overflow-hidden">
                 <div className="aspect-square rounded-3xl overflow-hidden mb-8 shadow-xl border-4 border-white">
                   <img src={selectedDoctor.image} className="w-full h-full object-cover object-top" alt={selectedDoctor.name} />
                 </div>
@@ -667,7 +667,7 @@ export default function DoctorsSection() {
                   </button>
                 </div>
 
-                <div className="p-10 overflow-y-auto space-y-10 bg-white custom-scrollbar">
+                <div className="p-10 overflow-y-auto space-y-10 bg-white custom-scrollbar flex-1">
                   <section>
                     <h4 className="text-[11px] font-black uppercase tracking-widest text-slate-400 mb-4">Professional Biography</h4>
                     <p className="text-base text-slate-700 leading-relaxed font-medium">{selectedDoctor.full}</p>
