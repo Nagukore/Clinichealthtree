@@ -502,7 +502,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi"],
     whoShouldVisit: "Patients with chronic respiratory issues or needing critical care expertise.",
     availability: "By Appointment",
-    image: "/Devipriya.jpg",
+    image: "/Dr. DeviPriya.jpeg",
   }
 ];
 
