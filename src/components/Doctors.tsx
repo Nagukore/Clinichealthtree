@@ -331,12 +331,12 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi"],
     whoShouldVisit: "Patients requiring complex kidney, prostate, or bladder surgeries.",
     availability: "By Appointment",
-    image: "/Lohith.jpg",
+    image: "/Dr. lohith.jpeg",
   },
   {
     id: "dr-priyadarshini",
     name: "Dr. Priyadarshini",
-    category: "General Medicine",
+    category: "Paediatrics",
     specialty: "Pediatrician",
     icon: <Stethoscope className="text-teal-600" />,
     experience: "TBD",
@@ -350,7 +350,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi"],
     whoShouldVisit: "Adults seeking expert diagnosis and medical management.",
     availability: "By Appointment",
-    image: "/placeholder-dr.jpg",
+    image: "/Dr. Priyadarshini.jpeg",
   },
 {
     id: "dr-shivakumar-v",
@@ -369,7 +369,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi"],
     whoShouldVisit: "Patients requiring advanced endoscopic procedures or specialist care for liver and pancreatic disorders.",
     availability: "By Appointment",
-    image: "/Shivakumar_V.jpg",
+    image: "/Dr. Shivkumar.jpeg",
   },
   {
     id: "dr-narasimhaiah",
@@ -407,7 +407,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi"],
     whoShouldVisit: "Parents seeking specialized medical care for their children.",
     availability: "By Appointment",
-    image: "/placeholder-dr.jpg",
+    image: "/Dr. Mahesh Meda.jpeg",
   },
   {
     id: "dr-vikram-naidu",
@@ -464,7 +464,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada"],
     whoShouldVisit: "Women seeking comprehensive obstetric or gynaecological care.",
     availability: "By Appointment",
-    image: "/placeholder-dr.jpg",
+    image: "/Dr. Suma.jpeg",
   },
  {
     id: "dr-prakruthi-kn",
@@ -483,7 +483,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi"],
     whoShouldVisit: "Patients seeking clinical skin care or advanced aesthetic and hair loss treatments.",
     availability: "By Appointment",
-    image: "/Prakruthi_KN.jpg",
+    image: "/Dr. Prakruthi.jpeg",
   },
   {
     id: "dr-devipriya",
