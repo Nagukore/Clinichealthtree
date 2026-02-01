@@ -89,17 +89,17 @@ function Footer() {
           {/* Clinical Departments */}
           {/* ---------------------------------------------------------------- */}
           <div>
-            <h4 className="text-white font-bold text-sm uppercase tracking-[0.2em] mb-6">Specialities</h4>
+            <h4 className="text-white font-bold text-sm uppercase tracking-[0.2em] mb-6">Services</h4>
             <ul className="space-y-3 text-sm">
               {[
-                "General Medicine",
-                "Cardiology Unit",
-                "Gastroenterology",
-                "General Surgery",
-                "Orthopaedics",
-                "Paediatrics",
-                "Diagnostics",
-                "Sleep Lab"
+                "Doctor Consultation",
+                "Lab & Diagnostics",
+                "Pharmacy",
+                "Physiotherapy",
+                "Sleep Study Lab",
+                "Vaccination",
+                "Health Check-up",
+                "Minor Sugery"
               ].map((service) => (
                 <li key={service} className="hover:text-slate-200 transition-colors cursor-pointer">
                   {service}
