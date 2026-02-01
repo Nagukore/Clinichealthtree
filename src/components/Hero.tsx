@@ -18,7 +18,7 @@ const slides = [
     subtitle: "Affordable preventive health packages for all age groups",
   },
   {
-    url: "/Clinic1.png",
+    url: "/ECG,ECHO.png",
     title: "Your Heart Deserves the Best Care",
     subtitle: "ECG • ECHO • TMT • HOLTER • ABPM • Cardiologist Consultation",
   },
@@ -36,6 +36,16 @@ const slides = [
     url: "/Services.jpg",
     title: "Multispeciality Healthcare",
     subtitle: "Doctors, diagnostics, lab, pharmacy & more",
+  },
+    {
+    url: "/Pharmacy.jpg",
+    title: "Pharmacy Store",
+    subtitle: "Prescription • OTC • Vitamins & Supplements",
+  },
+    {
+    url: "/Ultrasound.png",
+    title: "Professional Ultrasound Services",
+    subtitle: "Obstetric • Abdominal • Doppler • MSK • Pelvic",
   },
   {
     url: "/Clinic3.png",
