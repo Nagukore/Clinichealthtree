@@ -58,7 +58,7 @@ const SpecialtyClinics: ClinicItem[] = [
   { icon: Brain, title: 'Neurology', color: 'bg-purple-50', iconColor: 'text-purple-600' },
   { icon: Scissors, title: 'General & Gastro-Surgery', color: 'bg-slate-100', iconColor: 'text-slate-600' },
   { icon: Ear, title: 'ENT', color: 'bg-amber-50', iconColor: 'text-amber-600' },
-  { icon: Droplets, title: 'Urology', color: 'bg-blue-100', iconColor: 'text-blue-700' },
+  { icon: Droplets, title: 'Urology & Nephrology', color: 'bg-blue-100', iconColor: 'text-blue-700' },
   { icon: Radiation, title: 'Radiology', color: 'bg-violet-50', iconColor: 'text-violet-600' },
   { icon: Microscope, title: 'Pathology', color: 'bg-lime-50', iconColor: 'text-lime-600' },
   { icon: ShieldCheck, title: 'Psychiatry & Psychology', color: 'bg-indigo-50', iconColor: 'text-indigo-700' },
