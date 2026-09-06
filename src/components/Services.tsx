@@ -26,7 +26,6 @@ import {
   Waves,
   CircleDot,
 } from 'lucide-react';
-import { motion, Variants } from 'framer-motion';
 
 /* =========================
    TYPES
@@ -87,22 +86,6 @@ const DiagnosticServices: ServiceItem[] = [
 ];
 
 /* =========================
-   ANIMATIONS
-========================= */
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.03,
-      duration: 0.4,
-      ease: 'easeOut',
-    },
-  }),
-};
-
-/* =========================
    COMPONENT
 ========================= */
 const Services: React.FC = () => {
@@ -120,16 +103,10 @@ const Services: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {SpecialtyClinics.map((item, index) => (
-              <motion.div
+            {SpecialtyClinics.map((item) => (
+              <div
                 key={item.title}
-                custom={index}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={cardVariants}
-                whileHover={{ y: -5 }}
-                className="bg-slate-50 border border-slate-100 p-5 rounded-2xl flex flex-col items-center text-center hover:bg-white hover:shadow-lg transition"
+                className="bg-slate-50 border border-slate-100 p-5 rounded-2xl flex flex-col items-center text-center transition duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-lg"
               >
                 <div className={`${item.color} w-14 h-14 rounded-xl flex items-center justify-center mb-3`}>
                   <item.icon className={item.iconColor} size={24} />
@@ -137,7 +114,7 @@ const Services: React.FC = () => {
                 <h3 className="text-slate-800 font-bold text-xs md:text-sm">
                   {item.title}
                 </h3>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -152,15 +129,10 @@ const Services: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {DiagnosticServices.map((item, index) => (
-              <motion.div
+            {DiagnosticServices.map((item) => (
+              <div
                 key={item.title}
-                custom={index}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={cardVariants}
-                className="flex items-center gap-4 p-5 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-white hover:shadow-xl transition"
+                className="flex items-center gap-4 p-5 rounded-2xl border border-slate-100 bg-slate-50 transition duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-xl"
               >
                 <div className="bg-white p-3 rounded-xl shadow-sm">
                   <item.icon size={22} className="text-teal-600" />
@@ -173,7 +145,7 @@ const Services: React.FC = () => {
                     {item.desc}
                   </p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

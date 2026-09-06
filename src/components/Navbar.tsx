@@ -81,9 +81,9 @@ function Navbar() {
                 className="h-10 w-auto md:h-14 object-contain"
               />
               <div className="flex flex-col leading-tight">
-                <h1 className="text-lg md:text-xl font-bold text-teal-700 whitespace-nowrap">
+                <span className="text-lg font-bold text-teal-700 whitespace-nowrap md:text-xl">
                   Clinique HealthTree
-                </h1>
+                </span>
                 <p className="text-[10px] md:text-xs text-gray-600 whitespace-nowrap">
                   Multispeciality Clinic & Diagnostics
                 </p>
@@ -111,6 +111,9 @@ function Navbar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
               className="md:hidden text-gray-800 hover:text-teal-600 transition"
             >
               {isOpen ? <X size={30} /> : <Menu size={30} />}
@@ -120,6 +123,9 @@ function Navbar() {
 
         {/* Mobile Dropdown */}
         <div
+          id="mobile-menu"
+          {...(!isOpen && { inert: "" })}
+          aria-hidden={!isOpen}
           className={`md:hidden overflow-hidden transition-all duration-300 ${
             isOpen ? "max-h-96" : "max-h-0"
           }`}

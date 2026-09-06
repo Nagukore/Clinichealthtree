@@ -55,6 +55,7 @@ function Footer() {
               <a
                 href="https://www.facebook.com/share/17wtmYgner/"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 flex items-center justify-center bg-slate-900 border border-slate-800 rounded-xl hover:border-teal-500 hover:text-white transition-all group"
                 aria-label="Facebook"
               >
@@ -63,6 +64,7 @@ function Footer() {
               <a
                 href="https://www.instagram.com/healthtreeclinique?igsh=ODE0Nnk5MXd4Y3p3"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 flex items-center justify-center bg-slate-900 border border-slate-800 rounded-xl hover:border-teal-500 hover:text-white transition-all group"
                 aria-label="Instagram"
               >
@@ -105,10 +107,16 @@ function Footer() {
                 "Sleep Study Lab",
                 "Vaccination",
                 "Health Check-up",
-                "Minor Sugery"
+                "Minor Surgery"
               ].map((service) => (
-                <li key={service} className="hover:text-slate-200 transition-colors cursor-pointer">
-                  {service}
+                <li key={service}>
+                  <button
+                    type="button"
+                    onClick={() => scrollToSection("services")}
+                    className="text-left transition-colors hover:text-teal-400"
+                  >
+                    {service}
+                  </button>
                 </li>
               ))}
             </ul>
@@ -158,14 +166,12 @@ function Footer() {
         <div className="border-t border-slate-900 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-[11px] font-bold uppercase tracking-widest text-slate-600">
             <p className="text-center md:text-left">
-              © 2026 Clinique HealthTree. Clinical Excellence locally.
+              © {new Date().getFullYear()} Clinique HealthTree. Clinical excellence, locally.
             </p>
 
-            <div className="flex gap-8">
-              <a href="#" className="hover:text-teal-500 transition">Privacy</a>
-              <a href="#" className="hover:text-teal-500 transition">Terms</a>
-              <a href="#" className="hover:text-teal-500 transition">Sitemap</a>
-            </div>
+            <p className="text-center md:text-right">
+              AECS Layout, Singasandra, Bangalore
+            </p>
           </div>
         </div>
       </div>
