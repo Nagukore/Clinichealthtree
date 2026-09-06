@@ -21,28 +21,28 @@ interface Slide {
 /* ------------------------------------------------------------------ */
 const landingImages: Slide[] = [
     {
-    url: "/Clinic3.png",
+    url: "/img/clinic-800.webp",
     title: "Clinique HealthTree",
     subtitle: "Multispeciality Clinic & Diagnostics – Singasandra",
   },
   {
-    url: "/Healthcheck.png",
+    url: "/img/health-check-800.webp",
     title: "Complete Health Check-Ups",
     subtitle: "Affordable preventive health packages for all age groups",
   },
   {
-    url: "/Clinic1.png",
+    url: "/img/clinic-interior-800.webp",
     title: "Your Heart Deserves the Best Care",
     subtitle:
       "ECG • ECHO • TMT • HOLTER • ABPM • Cardiologist Consultation",
   },
   {
-    url: "/SleepApnea.png",
+    url: "/img/sleep-apnea-800.webp",
     title: "Sleep Apnea & Sleep Study",
     subtitle: "In-house sleep lab with expert consultation",
   },
   {
-    url: "/Fever.jpg",
+    url: "/img/fever-panel-800.webp",
     title: "Fever Panel – Fast Reports",
     subtitle: "CBC, ESR, CRP, Dengue & more – reports in 2 hours",
   },
@@ -52,7 +52,7 @@ const landingImages: Slide[] = [
 //     subtitle: "Health check-up packages starting from ₹799",
 //   },
   {
-    url: "/Services.jpg",
+    url: "/img/services-800.webp",
     title: "Multispeciality Healthcare",
     subtitle: "Doctors, diagnostics, lab, pharmacy & more",
   },
@@ -112,6 +112,9 @@ export default function LandingCarousel() {
             <img
               src={slide.url}
               alt=""
+              aria-hidden="true"
+              loading="lazy"
+              decoding="async"
               className="absolute inset-0 w-full h-full object-cover blur-2xl scale-110"
             />
 
@@ -124,6 +127,8 @@ export default function LandingCarousel() {
               <img
                 src={slide.url}
                 alt={slide.title}
+                loading="lazy"
+                decoding="async"
                 className="
                   w-auto
                   max-w-[90%]

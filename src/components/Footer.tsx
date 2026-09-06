@@ -23,9 +23,15 @@ function Footer() {
           <div className="space-y-6">
             <div className="flex items-center gap-4">
               {/* LOGO REPLACEMENT */}
-              <img 
-                src="/logo.png" 
-                alt="Clinique HealthTree Logo" 
+              <img
+                src="/img/logo-192.webp"
+                srcSet="/img/logo-96.webp 96w, /img/logo-192.webp 192w"
+                sizes="48px"
+                width={48}
+                height={48}
+                alt="Clinique HealthTree Logo"
+                loading="lazy"
+                decoding="async"
                 className="h-12 w-auto object-contain"
                 onError={(e) => (e.currentTarget.style.display = 'none')} // Hides if image is missing
               />

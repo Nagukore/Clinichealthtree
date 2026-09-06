@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Award,
   Clock,
@@ -19,9 +19,13 @@ import {
   Scissors,
   Users,
   Wind,
-  Ear
+  Ear,
+  Languages,
+  Quote,
+  BadgeCheck
 } from "lucide-react";
-import { motion, AnimatePresence, Variants } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import Img from "./Img";
 
 /* ================= TYPES ================= */
 
@@ -45,24 +49,24 @@ interface Doctor {
   image: string;
 }
 
+/* ================= HELPERS ================= */
+
+/** "12+ Years Experience" -> "12+". Keeps the card badge short. */
+function shortExperience(experience: string): string {
+  return experience.match(/^\s*(\d+\+?)/)?.[1] ?? experience;
+}
+
+/** The source data has stray spacing and casing (" Telugu", "tamil"). */
+function formatLanguages(languages: string[]): string[] {
+  const seen = new Set<string>();
+  return languages
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => l[0].toUpperCase() + l.slice(1).toLowerCase())
+    .filter((l) => (seen.has(l) ? false : (seen.add(l), true)));
+}
+
 /* ================= ANIMATION VARIANTS ================= */
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.05 },
-  },
-};
-
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: "easeOut" },
-  },
-};
 
 /* ================= DOCTOR DATA ================= */
 
@@ -84,7 +88,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi"," Telugu", "tamil"],
     whoShouldVisit: "Adults with lifestyle diseases, recurrent infections, or chronic pain.",
     availability: "Mon–Sat: 9 AM – 8 PM",
-    image: "/Sujith.jpg",
+    image: "/img/dr-sujith-ms",
   },
   {
     id: "dr-karthik-sm",
@@ -103,7 +107,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi"],
     whoShouldVisit: "Patients with chronic allergies, asthma, or metabolic health concerns.",
     availability: "Mon–Sat: 9 AM – 1:30 PM",
-    image: "/Dr. Karthik S M.png",
+    image: "/img/dr-karthik-sm",
   },
   {
     id: "dr-sagar",
@@ -122,7 +126,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi"],
     whoShouldVisit: "Anyone with sleep snoring, chronic cough, or breathing difficulties.",
     availability: "Mon–Fri: 10 AM – 6 PM",
-    image: "/Sagar.JPG",
+    image: "/img/dr-sagar",
   },
   {
     id: "dr-babu-reddy",
@@ -141,7 +145,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Telugu"],
     whoShouldVisit: "Patients with chest pain, heart conditions, or history of cardiac issues.",
     availability: "Tue-Sat: 10 AM - 5 PM",
-    image: "/Dr. Babureddy.jpg",
+    image: "/img/dr-babu-reddy",
   },
   {
     id: "dr-rajendra-reddy",
@@ -160,7 +164,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi", "French"],
     whoShouldVisit: "Patients with chronic joint pain, fractures, or bone deformities.",
     availability: "Mon–Thu: 9 AM – 4 PM",
-    image: "/Dr. Rajendra reddy.jpg",
+    image: "/img/dr-rajendra-reddy",
   },
   {
     id: "dr-gundurao-hj",
@@ -179,7 +183,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi"],
     whoShouldVisit: "Patients requiring pacemakers or advanced valve consultations.",
     availability: "Mon-Fri: 9 AM - 5 PM",
-    image: "/Dr. Gundu Rao.jpg",
+    image: "/img/dr-gundu-rao",
   },
   {
     id: "dr-ashwini-bs",
@@ -198,7 +202,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi", "Tamil", "Telugu"],
     whoShouldVisit: "Parents seeking wellness checks or medical care for infants and children.",
     availability: "Mon–Sat: 9 AM – 1 PM",
-    image: "/Ashwini.jpg",
+    image: "/img/ashwini",
   },
   {
     id: "dr-sujit-j",
@@ -217,7 +221,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi"],
     whoShouldVisit: "Expectant mothers or patients requiring specialized diagnostic scans.",
     availability: "Tue-Sat: 10 AM - 4 PM",
-    image: "/Dr. Sujith J.jpg",
+    image: "/img/dr-sujith-j",
   },
   {
     id: "dr-pramod-kumar",
@@ -236,7 +240,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Hindi", "Punjabi"],
     whoShouldVisit: "Patients with liver disease, chronic jaundice, or transplant needs.",
     availability: "By Appointment",
-    image: "/Dr. pramod.png",
+    image: "/img/dr-pramod",
   },
   {
     id: "dr-sachin-subbaraya",
@@ -255,7 +259,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi"],
     whoShouldVisit: "Patients requiring surgical intervention for abdominal or vascular issues.",
     availability: "By Appointment",
-    image: "/Dr. Sachin.jpg",
+    image: "/img/dr-sachin",
   },
   {
     id: "dr-nikhil-bondade",
@@ -274,7 +278,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi", "Marathi"],
     whoShouldVisit: "Patients seeking expert care for liver, gallbladder, or GI screening.",
     availability: "By Appointment",
-    image: "/Nikhil.jpeg",
+    image: "/img/nikhil",
   },
   {
     id: "dr-janani",
@@ -293,7 +297,7 @@ const doctors: Doctor[] = [
     languages: ["Kannada", "English", "Tamil", "Hindi"],
     whoShouldVisit: "Expectant mothers or women requiring advanced gynecological surgery.",
     availability: "By Appointment",
-    image: "/Janani.jpeg",
+    image: "/img/janani",
   },
   {
     id: "dr-anila-viswanath",
@@ -312,7 +316,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Malayalam", "Kannada", "Hindi"],
     whoShouldVisit: "Patients with chronic ear, nose, or throat infections.",
     availability: "Mon–Sat: 5 PM – 8 PM",
-    image: "/Dr. Anila.png",
+    image: "/img/dr-anila",
   },
   {
     id: "dr-lohith",
@@ -331,7 +335,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi"],
     whoShouldVisit: "Patients requiring complex kidney, prostate, or bladder surgeries.",
     availability: "By Appointment",
-    image: "/Dr. lohith.jpeg",
+    image: "/img/dr-lohith",
   },
   {
     id: "dr-priyadarshini",
@@ -350,7 +354,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi"],
     whoShouldVisit: "Adults seeking expert diagnosis and medical management.",
     availability: "By Appointment",
-    image: "/Dr. Priyadarshini.jpg",
+    image: "/img/dr-priyadarshini",
   },
 {
     id: "dr-shivakumar-v",
@@ -369,7 +373,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi"],
     whoShouldVisit: "Patients requiring advanced endoscopic procedures or specialist care for liver and pancreatic disorders.",
     availability: "By Appointment",
-    image: "/Dr. Shivkumar.jpeg",
+    image: "/img/dr-shivkumar",
   },
   {
     id: "dr-narasimhaiah",
@@ -388,7 +392,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi", "Telugu"],
     whoShouldVisit: "Patients requiring surgical evaluation or intervention.",
     availability: "By Appointment",
-    image: "/NoPhoto.jpeg",
+    image: "/img/no-photo",
   },
 {
   id: "dr-mahesh-meda",
@@ -427,7 +431,7 @@ const doctors: Doctor[] = [
   languages: ["English", "Kannada", "Hindi"],
   whoShouldVisit: "Patients with complex ENT disorders, hearing loss, sleep apnea, or head and neck conditions requiring surgical care.",
   availability: "By Appointment",
-  image: "/Dr. Mahesh Meda.jpeg",
+  image: "/img/dr-mahesh-meda",
 },
   {
     id: "dr-vikram-naidu",
@@ -446,7 +450,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Telugu", "Hindi"],
     whoShouldVisit: "Patients seeking general medical care and chronic disease management.",
     availability: "By Appointment",
-    image: "/NoPhoto.jpeg",
+    image: "/img/no-photo",
   },
   {
     id: "dr-varsha-sai",
@@ -465,7 +469,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Malayalam"],
     whoShouldVisit: "Patients seeking general medical care and chronic disease management.",
     availability: "By Appointment",
-    image: "/Nophoto.jpg",
+    image: "/img/no-photo",
   },
 {
   id: "dr-suma-raju",
@@ -505,7 +509,7 @@ const doctors: Doctor[] = [
   languages: ["English", "Hindi", "Telugu", "Kannada", "Tamil"],
   whoShouldVisit: "Patients with kidney-related disorders, hypertension, diabetes-related kidney complications, or those requiring dialysis or transplant evaluation.",
   availability: "By Appointment",
-  image: "/Dr. Suma.jpg",
+  image: "/img/dr-suma",
 },
 
  {
@@ -525,7 +529,7 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi"],
     whoShouldVisit: "Patients seeking clinical skin care or advanced aesthetic and hair loss treatments.",
     availability: "By Appointment",
-    image: "/Dr. Prakruthi.jpeg",
+    image: "/img/dr-prakruthi",
   },
   {
     id: "dr-devipriya",
@@ -544,9 +548,288 @@ const doctors: Doctor[] = [
     languages: ["English", "Kannada", "Hindi"],
     whoShouldVisit: "Patients with chronic respiratory issues or needing critical care expertise.",
     availability: "By Appointment",
-    image: "/Dr. DeviPriya.jpeg",
+    image: "/img/dr-devipriya",
   }
 ];
+
+/* ================= CARD ================= */
+
+function DoctorCard({ doc, onOpen }: { doc: Doctor; onOpen: () => void }) {
+  const languages = formatLanguages(doc.languages);
+
+  return (
+    <motion.article
+      layout
+      initial={{ opacity: 0, scale: 0.97 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.97 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
+      data-doctor-id={doc.id}
+      className="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200/70 transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-300/40 hover:ring-teal-200"
+    >
+      {/* PORTRAIT
+          A 4:5 crop keeps framing consistent across photos that arrive at
+          anything from 0.64 to 1.26 aspect. The scrim lifts the name off the
+          photo and evens out the mismatched studio backgrounds. */}
+      <div className="relative aspect-[4/5] overflow-hidden bg-slate-100">
+        <Img
+          stem={doc.image}
+          alt={doc.name}
+          fallbackStem="/img/no-photo"
+          sizes="(min-width: 1280px) 300px, (min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
+          className="h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/25 to-transparent" />
+
+        <span className="absolute right-2 top-2 rounded-full bg-white/95 px-2 py-0.5 text-[9px] font-semibold tabular-nums text-slate-700 shadow-sm ring-1 ring-black/5 sm:right-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-[10px]">
+          {shortExperience(doc.experience)} yrs
+        </span>
+
+        <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4">
+          <span className="mb-1.5 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-2 py-0.5 text-[8px] font-semibold uppercase tracking-[0.12em] text-white ring-1 ring-inset ring-white/25 backdrop-blur-sm sm:mb-2 sm:text-[9px] sm:tracking-[0.14em]">
+            {doc.category}
+          </span>
+          <h3 className="text-[13.5px] font-semibold leading-tight text-white sm:text-[17px]">{doc.name}</h3>
+          <p className="mt-0.5 text-[10.5px] font-medium leading-snug text-teal-200/90 sm:mt-1 sm:text-[12px]">{doc.specialty}</p>
+        </div>
+      </div>
+
+      {/* DETAIL */}
+      <div className="flex flex-1 flex-col p-3 sm:p-4">
+        <p className="hidden line-clamp-2 text-[11.5px] leading-relaxed text-slate-500 sm:block" title={doc.education}>
+          {doc.education}
+        </p>
+
+        <div className="mb-4 mt-3 hidden flex-wrap gap-1.5 sm:flex">
+          {doc.expertise.slice(0, 3).map((tag) => (
+            <span
+              key={tag}
+              className="rounded-md bg-teal-50 px-2 py-1 text-[10px] font-medium text-teal-800 ring-1 ring-inset ring-teal-100"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <dl className="mt-auto space-y-1.5 border-t border-slate-100 pt-2.5 text-[10.5px] leading-snug text-slate-500 sm:space-y-2 sm:pt-3 sm:text-[11px]">
+          <div className="flex items-start gap-2">
+            <dt className="sr-only">Availability</dt>
+            <Clock size={13} className="mt-px shrink-0 text-slate-400" />
+            <dd>{doc.availability}</dd>
+          </div>
+          <div className="hidden items-start gap-2 sm:flex">
+            <dt className="sr-only">Languages</dt>
+            <Languages size={13} className="mt-px shrink-0 text-slate-400" />
+            <dd>{languages.join(" · ")}</dd>
+          </div>
+        </dl>
+
+        <span className="mt-3 inline-flex items-center gap-1 text-[10.5px] font-semibold text-teal-700 sm:mt-4 sm:text-[11.5px]">
+          View clinical profile
+          <ChevronRight size={13} className="transition-transform duration-300 group-hover:translate-x-1" />
+        </span>
+      </div>
+
+      {/* The whole tile is the target, so the tap area on mobile is the card. */}
+      <button
+        type="button"
+        onClick={onOpen}
+        className="absolute inset-0 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
+      >
+        <span className="sr-only">View clinical profile for {doc.name}</span>
+      </button>
+    </motion.article>
+  );
+}
+
+/* ================= PROFILE DIALOG ================= */
+
+function DoctorDialog({ doc, onClose }: { doc: Doctor; onClose: () => void }) {
+  /* Close on Escape, and stop the page behind the dialog from scrolling. */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = previous;
+    };
+  }, [onClose]);
+
+  const languages = formatLanguages(doc.languages);
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <motion.div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="doctor-dialog-name"
+        initial={{ opacity: 0, scale: 0.97, y: 24 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.97, y: 24 }}
+        transition={{ duration: 0.22, ease: "easeOut" }}
+        onClick={(e) => e.stopPropagation()}
+        className="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-y-auto rounded-3xl bg-white shadow-2xl md:flex-row md:overflow-hidden"
+      >
+        {/* SIDEBAR */}
+        <aside className="flex flex-col gap-6 border-b border-slate-100 bg-slate-50 p-6 md:w-72 md:shrink-0 md:overflow-y-auto md:border-b-0 md:border-r">
+          <div className="aspect-square overflow-hidden rounded-2xl shadow-md ring-4 ring-white">
+            <Img
+              stem={doc.image}
+              alt={doc.name}
+              fallbackStem="/img/no-photo"
+              loading="eager"
+              sizes="(min-width: 768px) 256px, 80vw"
+              className="h-full w-full object-cover object-top"
+            />
+          </div>
+
+          <dl className="space-y-5">
+            <div className="flex gap-3">
+              <Award className="mt-0.5 shrink-0 text-teal-600" size={17} />
+              <div>
+                <dt className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Experience</dt>
+                <dd className="mt-1 text-[13px] font-semibold text-slate-800">{doc.experience}</dd>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <GraduationCap className="mt-0.5 shrink-0 text-teal-600" size={17} />
+              <div>
+                <dt className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Qualifications</dt>
+                <dd className="mt-1 text-[12px] font-medium leading-relaxed text-slate-700">{doc.education}</dd>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <Languages className="mt-0.5 shrink-0 text-teal-600" size={17} />
+              <div>
+                <dt className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Speaks</dt>
+                <dd className="mt-1 text-[12px] font-medium text-slate-700">{languages.join(", ")}</dd>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <Clock className="mt-0.5 shrink-0 text-teal-600" size={17} />
+              <div>
+                <dt className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Consulting hours</dt>
+                <dd className="mt-1 text-[12px] font-medium text-slate-700">{doc.availability}</dd>
+              </div>
+            </div>
+          </dl>
+
+          <a
+            href="tel:+918041663537"
+            className="mt-auto hidden items-center justify-center gap-2 rounded-xl bg-teal-600 py-3 text-[12px] font-semibold text-white shadow-sm transition hover:bg-teal-700 md:flex"
+          >
+            <Phone size={15} /> Book consultation
+          </a>
+        </aside>
+
+        {/* BODY */}
+        <div className="flex min-w-0 flex-1 flex-col">
+          <header className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-slate-100 bg-white/95 px-6 py-5 backdrop-blur md:px-8">
+            <div className="min-w-0">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-teal-700 ring-1 ring-inset ring-teal-100">
+                <BadgeCheck size={12} /> {doc.category}
+              </span>
+              <h2 id="doctor-dialog-name" className="mt-2 text-2xl font-bold leading-tight text-slate-900">
+                {doc.name}
+              </h2>
+              <p className="mt-0.5 text-[14px] font-medium text-teal-700">{doc.specialty}</p>
+            </div>
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close profile"
+              className="shrink-0 rounded-full bg-slate-100 p-2.5 text-slate-500 transition hover:bg-slate-200 hover:text-slate-700"
+            >
+              <X size={20} />
+            </button>
+          </header>
+
+          <div className="flex-1 space-y-8 overflow-y-auto px-6 py-7 md:px-8">
+            {/* Philosophy: written for every doctor, but never shown until now. */}
+            <figure className="relative rounded-2xl bg-slate-50 p-5 pl-12 ring-1 ring-slate-100">
+              <Quote size={18} className="absolute left-5 top-5 text-teal-500" />
+              <blockquote className="text-[14px] font-medium italic leading-relaxed text-slate-700">
+                {doc.philosophy}
+              </blockquote>
+            </figure>
+
+            <section>
+              <h3 className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">About</h3>
+              <p className="text-[14px] leading-relaxed text-slate-700">{doc.full}</p>
+              <p className="mt-3 text-[13px] leading-relaxed text-slate-500">{doc.impact}</p>
+            </section>
+
+            <section>
+              <h3 className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                Areas of expertise
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {doc.expertise.map((item) => (
+                  <span
+                    key={item}
+                    className="rounded-lg bg-teal-50 px-3 py-1.5 text-[12px] font-medium text-teal-800 ring-1 ring-inset ring-teal-100"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </section>
+
+            <section className="rounded-2xl border border-teal-100 bg-teal-50/60 p-5">
+              <h3 className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-teal-700">
+                <CheckCircle2 size={14} /> Who should book
+              </h3>
+              <p className="text-[13px] font-medium leading-relaxed text-teal-900">{doc.whoShouldVisit}</p>
+            </section>
+
+            <div className="grid gap-8 sm:grid-cols-2">
+              <section>
+                <h3 className="mb-4 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                  <Activity size={13} /> Conditions treated
+                </h3>
+                <ul className="space-y-2.5">
+                  {doc.conditions.map((c) => (
+                    <li key={c} className="flex items-start gap-2.5 text-[12.5px] text-slate-700">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-500" />
+                      {c}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+              <section>
+                <h3 className="mb-4 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                  <Briefcase size={13} /> Procedures &amp; services
+                </h3>
+                <ul className="space-y-2.5">
+                  {doc.procedures.map((pr) => (
+                    <li key={pr} className="flex items-start gap-2.5 text-[12.5px] text-slate-700">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-slate-300" />
+                      {pr}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            </div>
+
+            <a
+              href="tel:+918041663537"
+              className="flex items-center justify-center gap-2.5 rounded-xl bg-teal-600 py-4 text-[13px] font-semibold text-white shadow-sm transition hover:bg-teal-700 md:hidden"
+            >
+              <Phone size={16} /> Book consultation
+            </a>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
 
 /* ================= MAIN COMPONENT ================= */
 
@@ -554,210 +837,85 @@ export default function DoctorsSection() {
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [activeTab, setActiveTab] = useState("All");
 
-  const categories = ["All", ...Array.from(new Set(doctors.map(d => d.category)))];
+  const categories = ["All", ...Array.from(new Set(doctors.map((d) => d.category)))];
+  const countFor = (cat: string) =>
+    cat === "All" ? doctors.length : doctors.filter((d) => d.category === cat).length;
 
-  const filteredDoctors = activeTab === "All" 
-    ? doctors 
-    : doctors.filter(doc => doc.category === activeTab);
+  const filteredDoctors =
+    activeTab === "All" ? doctors : doctors.filter((doc) => doc.category === activeTab);
 
   return (
-    <section id="doctors" className="py-20 bg-slate-50 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4">
+    <section id="doctors" className="relative overflow-hidden bg-slate-50 py-20">
+      {/* Soft wash so the section reads as its own chapter of the page. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-white to-transparent"
+      />
 
+      <div className="relative mx-auto max-w-7xl px-4">
         {/* HEADER */}
-        <div className="text-center mb-12">
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-100 border border-teal-200 mb-4"
-          >
-            <ShieldCheck size={14} className="text-teal-700" />
-            <span className="text-teal-800 text-[10px] font-black uppercase tracking-widest">
-              Clinique Health Tree Medical Board
+        <div className="mx-auto mb-10 max-w-2xl text-center">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-teal-200 bg-teal-100/70 px-3 py-1">
+            <ShieldCheck size={13} className="text-teal-700" />
+            <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-teal-800">
+              Clinique HealthTree Medical Board
             </span>
-          </motion.div>
-          <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">
+          </div>
+
+          <h2 className="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
             Our <span className="text-teal-600">Specialists</span>
           </h2>
-          
-          {/* CATEGORY TABS */}
-          <div className="flex flex-wrap justify-center gap-2 mt-8">
-            {categories.map((cat) => (
+
+          <p className="mx-auto mt-4 text-[15px] leading-relaxed text-slate-500">
+            {doctors.length} consultants across {categories.length - 1} departments, available
+            seven days a week under one roof in Singasandra.
+          </p>
+        </div>
+
+        {/* FILTER */}
+        <div className="mb-10 flex flex-wrap justify-center gap-2">
+          {categories.map((cat) => {
+            const active = activeTab === cat;
+            return (
               <button
                 key={cat}
+                type="button"
                 onClick={() => setActiveTab(cat)}
-                className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all border ${
-                  activeTab === cat 
-                  ? "bg-teal-600 text-white border-teal-600 shadow-lg shadow-teal-200" 
-                  : "bg-white text-slate-500 border-slate-200 hover:border-teal-400"
+                aria-pressed={active}
+                className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[11.5px] font-medium transition ${
+                  active
+                    ? "bg-teal-600 text-white shadow-sm shadow-teal-200"
+                    : "bg-white text-slate-600 ring-1 ring-slate-200 hover:text-teal-700 hover:ring-teal-300"
                 }`}
               >
                 {cat}
+                <span
+                  className={`text-[10px] tabular-nums ${active ? "text-teal-100" : "text-slate-400"}`}
+                >
+                  {countFor(cat)}
+                </span>
               </button>
-            ))}
-          </div>
+            );
+          })}
         </div>
 
-        {/* DOCTORS GRID */}
-        <motion.div 
+        {/* GRID */}
+        <motion.div
           layout
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4"
         >
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence mode="popLayout" initial={false}>
             {filteredDoctors.map((doc) => (
-              <motion.article
-                layout
-                key={doc.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                whileHover={{ y: -8 }}
-                className="bg-white rounded-[2rem] shadow-sm hover:shadow-2xl border border-slate-200 flex flex-col overflow-hidden transition-all duration-500 group"
-              >
-                {/* IMAGE */}
-                <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100 relative">
-                  <img
-                    src={doc.image}
-                    alt={doc.name}
-                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
-                    onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/400x300?text=Specialist'; }}
-                  />
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-xl border border-slate-100 shadow-sm">
-                     <span className="text-[10px] font-black text-slate-600 uppercase tracking-tighter">{doc.experience}</span>
-                  </div>
-                </div>
-
-                {/* CONTENT */}
-                <div className="p-6 flex flex-col flex-grow">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="p-1.5 bg-teal-50 rounded-lg shrink-0">{doc.icon}</div>
-                    <span className="text-[10px] font-bold text-teal-600 uppercase tracking-widest">{doc.category}</span>
-                  </div>
-
-                  <h3 className="text-xl font-black text-slate-900 mb-1">{doc.name}</h3>
-                  <p className="text-slate-500 font-bold text-xs mb-4 leading-tight min-h-[2.5rem]">
-                    {doc.specialty}
-                  </p>
-
-                  <button
-                    onClick={() => setSelectedDoctor(doc)}
-                    className="mt-auto w-full py-4 bg-slate-900 text-white rounded-2xl text-xs font-black flex items-center justify-center gap-2 hover:bg-teal-600 transition-all shadow-md group-hover:shadow-teal-200"
-                  >
-                    View Clinical Profile
-                    <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </div>
-              </motion.article>
+              <DoctorCard key={doc.id} doc={doc} onOpen={() => setSelectedDoctor(doc)} />
             ))}
           </AnimatePresence>
         </motion.div>
       </div>
 
-      {/* MODAL */}
+      {/* PROFILE DIALOG */}
       <AnimatePresence>
         {selectedDoctor && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/70 backdrop-blur-md p-4">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 40 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 40 }}
-              className="bg-white max-w-5xl w-full rounded-[3rem] flex flex-col md:flex-row overflow-y-auto md:overflow-hidden max-h-[90vh] shadow-2xl"
-            >
-              {/* MODAL SIDEBAR */}
-              <div className="md:w-80 bg-slate-50 p-8 border-b md:border-r flex flex-col md:overflow-hidden">
-                <div className="aspect-square rounded-3xl overflow-hidden mb-8 shadow-xl border-4 border-white">
-                  <img src={selectedDoctor.image} className="w-full h-full object-cover object-top" alt={selectedDoctor.name} />
-                </div>
-                <div className="space-y-6 flex-grow">
-                  <div className="flex gap-4 items-center">
-                    <Award className="text-teal-600 shrink-0" size={20} />
-                    <div>
-                      <p className="text-[10px] font-black uppercase text-slate-400 mb-1">Clinical Experience</p>
-                      <p className="font-bold text-slate-800 text-sm leading-none">{selectedDoctor.experience}</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-4 items-start">
-                    <GraduationCap className="text-teal-600 shrink-0" size={20} />
-                    <div>
-                      <p className="text-[10px] font-black uppercase text-slate-400 mb-1">Board Certification</p>
-                      <p className="font-bold text-[12px] leading-tight text-slate-800">{selectedDoctor.education}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-8 pt-8 border-t border-slate-200">
-                  <div className="flex items-center gap-3">
-                    <Clock className="text-teal-600" size={18} />
-                    <span className="text-[12px] font-bold text-slate-600">{selectedDoctor.availability}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* MODAL BODY */}
-              <div className="flex-1 flex flex-col min-w-0">
-                <div className="p-8 border-b flex justify-between items-center bg-white sticky top-0 z-10">
-                  <div>
-                    <h2 className="text-3xl font-black text-slate-900 mb-1 leading-none">{selectedDoctor.name}</h2>
-                    <p className="text-teal-600 font-bold text-base leading-none">{selectedDoctor.specialty}</p>
-                  </div>
-                  <button onClick={() => setSelectedDoctor(null)} className="p-3 bg-slate-100 rounded-full hover:bg-slate-200 transition-all">
-                    <X size={24} className="text-slate-500" />
-                  </button>
-                </div>
-
-                <div className="p-10 overflow-y-auto space-y-10 bg-white custom-scrollbar flex-1">
-                  <section>
-                    <h4 className="text-[11px] font-black uppercase tracking-widest text-slate-400 mb-4">Professional Biography</h4>
-                    <p className="text-base text-slate-700 leading-relaxed font-medium">{selectedDoctor.full}</p>
-                  </section>
-
-                  <section className="bg-teal-50/50 p-6 rounded-3xl border border-teal-100">
-                    <h4 className="text-[11px] font-black uppercase tracking-widest text-teal-700 mb-4 flex items-center gap-2">
-                      <CheckCircle2 size={16} /> Clinical Mastery & Patient Fit
-                    </h4>
-                    <p className="text-teal-900 text-sm font-bold leading-relaxed">{selectedDoctor.whoShouldVisit}</p>
-                  </section>
-
-                  <div className="grid sm:grid-cols-2 gap-10">
-                    <div>
-                      <h4 className="text-[11px] font-black uppercase tracking-widest text-slate-400 mb-5 flex items-center gap-2">
-                        <Activity size={14} /> Clinical Interests
-                      </h4>
-                      <ul className="space-y-3">
-                        {selectedDoctor.conditions.map((c, i) => (
-                          <li key={i} className="flex items-center gap-3 text-xs font-bold text-slate-700">
-                            <div className="w-1.5 h-1.5 rounded-full bg-teal-500" /> {c}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="text-[11px] font-black uppercase tracking-widest text-slate-400 mb-5 flex items-center gap-2">
-                        <Briefcase size={14} /> Procedures & Services
-                      </h4>
-                      <ul className="space-y-3">
-                        {selectedDoctor.procedures.map((p, i) => (
-                          <li key={i} className="flex items-center gap-3 text-xs font-bold text-slate-700">
-                            <div className="w-1.5 h-1.5 rounded-full bg-slate-400" /> {p}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div className="pt-8">
-                    <a href="tel:+918041663537" className="w-full bg-teal-600 text-white py-5 rounded-[1.5rem] font-black flex items-center justify-center gap-4 hover:bg-teal-700 transition-all shadow-xl shadow-teal-100 hover:scale-[1.02] active:scale-95">
-                      <Phone size={20} /> Schedule Consultation
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+          <DoctorDialog doc={selectedDoctor} onClose={() => setSelectedDoctor(null)} />
         )}
       </AnimatePresence>
     </section>

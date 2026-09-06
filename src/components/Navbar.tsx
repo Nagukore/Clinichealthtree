@@ -21,7 +21,7 @@ function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToSection = (href) => {
+  const scrollToSection = (href: string) => {
     const id = href.replace('#', '');
     const element = document.getElementById(id);
     if (element) {
@@ -69,8 +69,15 @@ function Navbar() {
             {/* LOGO + TEXT */}
             <a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection('#home'); }} className="flex items-center gap-2 cursor-pointer">
               <img
-                src="/logo.png"
+                src="/img/logo-192.webp"
+                srcSet="/img/logo-96.webp 96w, /img/logo-192.webp 192w"
+                sizes="56px"
+                width={56}
+                height={56}
                 alt="Clinique HealthTree Logo"
+                loading="eager"
+                {...({ fetchpriority: 'high' } as Record<string, string>)}
+                decoding="async"
                 className="h-10 w-auto md:h-14 object-contain"
               />
               <div className="flex flex-col leading-tight">

@@ -1,0 +1,3 @@
+# Full-resolution originals. They are the input to scripts/optimize-images.mjs
+# and are never served, so keep them out of the deployment upload.
+image-source

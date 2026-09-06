@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Calendar,
   MapPin,
@@ -7,48 +7,49 @@ import {
   ChevronRight,
   Phone,
 } from "lucide-react";
+import Img from "./Img";
 
 /* ------------------------------------------------------------------ */
 /* Slides Data */
 /* ------------------------------------------------------------------ */
 const slides = [
   {
-    url: "/Healthcheck.png",
+    url: "/img/health-check",
     title: "Complete Health Check-Ups",
     subtitle: "Affordable preventive health packages for all age groups",
   },
   {
-    url: "/ECG,ECHO.png",
+    url: "/img/ecg-echo",
     title: "Your Heart Deserves the Best Care",
     subtitle: "ECG • ECHO • TMT • HOLTER • ABPM • Cardiologist Consultation",
   },
   {
-    url: "/SleepApnea.png",
+    url: "/img/sleep-apnea",
     title: "Sleep Apnea & Sleep Study",
     subtitle: "In-house sleep lab with expert consultation",
   },
   {
-    url: "/Fever.jpg",
+    url: "/img/fever-panel",
     title: "Fever Panel – Fast Reports",
     subtitle: "CBC, ESR, CRP, Dengue & more – reports in 2 hours",
   },
   {
-    url: "/Services.jpg",
+    url: "/img/services",
     title: "Multispeciality Healthcare",
     subtitle: "Doctors, diagnostics, lab, pharmacy & more",
   },
     {
-    url: "/Pharmacy.jpg",
+    url: "/img/pharmacy",
     title: "Pharmacy Store",
     subtitle: "Prescription • OTC • Vitamins & Supplements",
   },
     {
-    url: "/Ultrasound.png",
+    url: "/img/ultrasound",
     title: "Professional Ultrasound Services",
     subtitle: "Obstetric • Abdominal • Doppler • MSK • Pelvic",
   },
   {
-    url: "/Clinic3.png",
+    url: "/img/clinic",
     title: "Clinique HealthTree",
     subtitle: "Multispeciality Clinic & Diagnostics – Singasandra",
   },
@@ -59,14 +60,47 @@ const slides = [
 /* ------------------------------------------------------------------ */
 export default function Hero() {
   const [current, setCurrent] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
-  /* Autoplay */
+  /* Autoplay - only while the carousel is actually on screen and the tab is
+     visible, so it stops burning CPU/battery once the user scrolls past. */
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % slides.length);
-    }, 3500);
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) return;
 
-    return () => clearInterval(timer);
+    let timer: ReturnType<typeof setInterval> | undefined;
+    const stop = () => {
+      if (timer) clearInterval(timer);
+      timer = undefined;
+    };
+    const start = () => {
+      if (timer) return;
+      timer = setInterval(() => {
+        setCurrent((prev) => (prev + 1) % slides.length);
+      }, 3500);
+    };
+
+    let onScreen = false;
+    const sync = () => (onScreen && !document.hidden ? start() : stop());
+
+    const node = carouselRef.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        onScreen = entry.isIntersecting;
+        sync();
+      },
+      { threshold: 0.2 }
+    );
+    if (node) observer.observe(node);
+
+    // Resume when the visitor comes back to the tab, not just pause on leaving.
+    document.addEventListener("visibilitychange", sync);
+
+    return () => {
+      stop();
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", sync);
+    };
   }, []);
 
   const scrollToSection = (id: string) => {
@@ -88,35 +122,56 @@ export default function Hero() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           
           {/* LEFT: Carousel */}
-          <div className="relative h-[60vh] md:h-[520px] rounded-3xl overflow-hidden shadow-2xl bg-black">
-            {slides.map((slide, idx) => (
-              <div
-                key={idx}
-                className={`absolute inset-0 transition-opacity duration-700 ${
-                  idx === current ? "opacity-100 z-10" : "opacity-0 z-0"
-                }`}
-              >
-                {/* Blurred background effect */}
-                <img
-                  src={slide.url}
-                  alt=""
-                  className="absolute inset-0 w-full h-full object-cover blur-2xl scale-110 opacity-50"
-                />
-                <div className="absolute inset-0 bg-black/40" />
+          <div
+            ref={carouselRef}
+            className="relative h-[60vh] md:h-[520px] rounded-3xl overflow-hidden shadow-2xl bg-black"
+          >
+            {slides.map((slide, idx) => {
+              /* Mount only the visible slide and its two neighbours. The other
+                 posters are never requested until the carousel reaches them. */
+              const distance = Math.min(
+                Math.abs(idx - current),
+                slides.length - Math.abs(idx - current)
+              );
+              if (distance > 1) return null;
 
-                {/* Foreground image + caption */}
-                <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 gap-4">
+              return (
+                <div
+                  key={idx}
+                  className={`absolute inset-0 transition-opacity duration-700 ${
+                    idx === current ? "opacity-100 z-10" : "opacity-0 z-0"
+                  }`}
+                >
+                  {/* Ambient backdrop: the small variant, blurred, fills the
+                      letterbox around the contained poster. */}
                   <img
-                    src={slide.url}
-                    alt={slide.title}
-                    className="h-[75%] max-w-[90%] object-contain rounded-xl shadow-2xl"
+                    src={`${slide.url}-800.webp`}
+                    alt=""
+                    aria-hidden="true"
+                    loading={idx === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover blur-xl scale-110 opacity-50"
                   />
-                  <p className="text-xs sm:text-sm text-white bg-black/60 backdrop-blur-md px-4 py-2 rounded-full text-center max-w-[90%] border border-white/10">
-                    {slide.subtitle}
-                  </p>
+                  <div className="absolute inset-0 bg-black/40" />
+
+                  {/* Foreground image + caption */}
+                  <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 gap-4">
+                    <Img
+                      stem={slide.url}
+                      alt={slide.title}
+                      widths={[800, 1600]}
+                      sizes="(min-width: 768px) 620px, 92vw"
+                      loading={idx === 0 ? "eager" : "lazy"}
+                      fetchPriority={idx === 0 ? "high" : "auto"}
+                      className="h-[75%] max-w-[90%] object-contain rounded-xl shadow-2xl"
+                    />
+                    <p className="text-xs sm:text-sm text-white bg-black/60 backdrop-blur-md px-4 py-2 rounded-full text-center max-w-[90%] border border-white/10">
+                      {slide.subtitle}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
 
             {/* Carousel Controls */}
             <button
